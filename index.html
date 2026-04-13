@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>光耀集团AI赋能培训 - 前期调研问卷</title>
 <style>
+  /* 隐藏的 input 完全不可交互，防止微信浏览器原生联动 */
+  .option input, .rating-option input { pointer-events: none !important; }
   :root {
     --primary: #1A3A6B;
     --accent: #D4A843;
@@ -379,29 +381,10 @@
 
 <script>
 // ===== Option selection =====
+// 用 click 事件 + CSS touch-action 防滑动误触
 document.querySelectorAll('.option, .rating-option').forEach(function(opt) {
-  var startX = 0, startY = 0, startTime = 0;
-
-  opt.addEventListener('touchstart', function(e) {
-    var t = e.changedTouches[0];
-    startX = t.clientX; startY = t.clientY; startTime = Date.now();
-  }, { passive: true });
-
-  opt.addEventListener('touchend', function(e) {
-    var t = e.changedTouches[0];
-    if (Math.abs(t.clientX - startX) > 8 || Math.abs(t.clientY - startY) > 8 || Date.now() - startTime > 300) return;
-
-    var scrollY = window.pageYOffset || document.documentElement.scrollTop;
-    handleSelect(opt);
-    // 微信浏览器会自动滚走，下一帧恢复
-    requestAnimationFrame(function() { window.scrollTo(0, scrollY); });
-  }, { passive: true });
-
-  var mDown = null;
-  opt.addEventListener('mousedown', function(e) { mDown = { x: e.clientX, y: e.clientY }; });
-  opt.addEventListener('mouseup', function(e) {
-    if (!mDown || Math.abs(e.clientX - mDown.x) > 3 || Math.abs(e.clientY - mDown.y) > 3) return;
-    handleSelect(opt);
+  opt.addEventListener('click', function(e) {
+    handleSelect(this);
   });
 });
 
@@ -418,8 +401,13 @@ function handleSelect(el) {
     el.classList.add('selected');
     if (input) input.checked = true;
   } else if (isCheckbox) {
-    if (el.classList.contains('selected')) { el.classList.remove('selected'); if (input) input.checked = false; }
-    else { el.classList.add('selected'); if (input) input.checked = true; }
+    if (el.classList.contains('selected')) {
+      el.classList.remove('selected');
+      if (input) input.checked = false;
+    } else {
+      el.classList.add('selected');
+      if (input) input.checked = true;
+    }
   } else {
     parent.querySelectorAll('.option').forEach(function(o) { o.classList.remove('selected'); });
     parent.querySelectorAll('.option input').forEach(function(i) { i.checked = false; });

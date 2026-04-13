@@ -613,17 +613,33 @@
 
 <script>
 // ===== Option selection =====
-document.querySelectorAll('.option').forEach(opt => {
+document.querySelectorAll('.option, .rating-option').forEach(opt => {
   opt.addEventListener('click', function(e) {
-    const parent = this.closest('.options');
-    const isCheckbox = parent.dataset.type === 'checkbox';
-    const isRating = parent.dataset.type === 'rating';
+    e.preventDefault();
+    const parent = this.closest('.options') || this.closest('.rating-options');
+    if (!parent) return;
+
+    const type = parent.dataset.type;
+    const isCheckbox = (type === 'checkbox' || this.classList.contains('checkbox'));
+    const isRatingOption = this.classList.contains('rating-option');
     const input = this.querySelector('input');
 
-    if (isCheckbox || isRating) {
-      this.classList.toggle('selected');
+    if (isRatingOption) {
+      // Rating: radio behavior
+      parent.querySelectorAll('.rating-option').forEach(o => o.classList.remove('selected'));
+      parent.querySelectorAll('input').forEach(i => i.checked = false);
+      this.classList.add('selected');
+      input.checked = true;
+    } else if (isCheckbox) {
+      // Checkbox: toggle
       input.checked = !input.checked;
+      if (input.checked) {
+        this.classList.add('selected');
+      } else {
+        this.classList.remove('selected');
+      }
     } else {
+      // Radio: single select
       parent.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
       parent.querySelectorAll('input').forEach(i => i.checked = false);
       this.classList.add('selected');
@@ -631,6 +647,9 @@ document.querySelectorAll('.option').forEach(opt => {
     }
     updateProgress();
   });
+
+  // Prevent default on label clicks inside options
+  opt.addEventListener('mousedown', function(e) { e.preventDefault(); });
 });
 
 // ===== Progress tracking =====

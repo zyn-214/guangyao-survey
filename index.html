@@ -350,9 +350,9 @@
   </div>
 
   <div class="question">
-    <label class="q-label">F2. 您是否有一个具体的工作场景，希望当天在课堂上实际动手演示解决？（选填）</label>
+    <label class="q-label"><span class="required">*</span> F2. 您是否有一个具体的工作场景，希望当天在课堂上实际动手演示解决？（必填）</label>
     <p class="q-hint">填写后讲师会尽量现场演示，越具体越好（如：每月收集各部门打卡积分、每周要写楼盘朋友圈推文等）</p>
-    <textarea name="scenario" placeholder="请描述您的具体工作场景和痛点……"></textarea>
+    <textarea name="scenario" placeholder="请描述您的具体工作场景和痛点……" required data-required="true"></textarea>
   </div>
 
   <div class="question">
@@ -379,20 +379,14 @@
 
 <script>
 // ===== Option selection =====
-// 关键修复：用 pointerdown + preventDefault 阻止微信浏览器对 label>隐藏input 的原生行为，
-// 然后完全由 JS 控制选中状态
+// 兼容方案：用 click 事件（不会在滑动时误触发），
+// 对 checkbox 通过 change 事件 + preventDefault 阻止微信浏览器的双重切换
 document.querySelectorAll('.option').forEach(opt => {
-  opt.addEventListener('pointerdown', function(e) {
-    // 只对左键/触摸响应
-    if (e.button !== 0 && e.pointerType !== 'touch' && e.pointerType !== 'mouse') return;
-
+  opt.addEventListener('click', function(e) {
     const parent = this.closest('.options');
     const isCheckbox = parent.dataset.type === 'checkbox';
     const isRating = parent.dataset.type === 'rating';
     const input = this.querySelector('input');
-
-    // 阻止浏览器原生的 label→hidden input 联动（这是微信浏览器多选失效的根因）
-    e.preventDefault();
 
     if (isRating) {
       // 评分：单选
@@ -401,7 +395,7 @@ document.querySelectorAll('.option').forEach(opt => {
       this.classList.add('selected');
       input.checked = true;
     } else if (isCheckbox) {
-      // 多选：切换当前项
+      // 多选：切换当前项（状态由下面的 change 事件统一管理）
       if (this.classList.contains('selected')) {
         this.classList.remove('selected');
         input.checked = false;
@@ -420,6 +414,18 @@ document.querySelectorAll('.option').forEach(opt => {
   });
 });
 
+// 对所有 checkbox 的 change 事件做防抖：
+// 微信浏览器点击 label 时会自动触发原生 change 改变 checked 状态，
+// 我们的 click 已经手动设置了正确的 checked，所以这里 preventDefault 阻止二次翻转
+document.querySelectorAll('.option.checkbox input[type="checkbox"]').forEach(input => {
+  input.addEventListener('change', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    // 停止冒泡，防止父级 label 再触发一次 click
+    return false;
+  }, { capture: true });
+});
+
 // ===== Progress tracking =====
 function updateProgress() {
   const requiredFields = document.querySelectorAll('[data-required="true"]');
@@ -429,6 +435,8 @@ function updateProgress() {
   requiredFields.forEach(f => {
     if (f.classList.contains('options')) {
       if (f.querySelector('input:checked')) filled++;
+    } else if (f.tagName === 'TEXTAREA' || f.tagName === 'INPUT') {
+      if (f.value.trim()) filled++;
     }
   });
 
@@ -450,6 +458,11 @@ function handleSubmit() {
   document.querySelectorAll('[data-required="true"]').forEach(field => {
     if (field.classList.contains('options')) {
       if (!field.querySelector('input:checked')) {
+        field.classList.add('error');
+        if (!firstError) firstError = field;
+      }
+    } else if (field.tagName === 'TEXTAREA' || field.tagName === 'INPUT') {
+      if (!field.value.trim()) {
         field.classList.add('error');
         if (!firstError) firstError = field;
       }

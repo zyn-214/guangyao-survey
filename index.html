@@ -379,40 +379,73 @@
 
 <script>
 // ===== Option selection =====
-// 兼容方案：用 click 事件（不会在滑动时误触发），
-// 对 checkbox 通过 change 事件 + preventDefault 阻止微信浏览器的双重切换
-document.querySelectorAll('.option').forEach(opt => {
-  opt.addEventListener('click', function(e) {
-    const parent = this.closest('.options');
-    const isCheckbox = parent.dataset.type === 'checkbox';
-    const isRating = parent.dataset.type === 'rating';
-    const input = this.querySelector('input');
+// 彻底方案：不用 click（会被滑动误触发）、不用 pointerdown（会跟原生 label 冲突）
+// 用 touchend 判断是不是一次真正的点击（位移小 + 时长短），同时用 data 属性替代 hidden input
+document.querySelectorAll('.option, .rating-option').forEach(opt => {
+  let startX = 0, startY = 0, startTime = 0;
 
-    if (isRating) {
-      // 评分：单选
-      parent.querySelectorAll('.rating-option').forEach(o => o.classList.remove('selected'));
-      parent.querySelectorAll('.rating-option input').forEach(i => i.checked = false);
-      this.classList.add('selected');
-      input.checked = true;
-    } else if (isCheckbox) {
-      // 多选：切换当前项（状态由下面的 change 事件统一管理）
-      if (this.classList.contains('selected')) {
-        this.classList.remove('selected');
-        input.checked = false;
-      } else {
-        this.classList.add('selected');
-        input.checked = true;
-      }
-    } else {
-      // 单选：清除同组其他项
-      parent.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
-      parent.querySelectorAll('.option input').forEach(i => i.checked = false);
-      this.classList.add('selected');
-      input.checked = true;
-    }
-    updateProgress();
+  opt.addEventListener('touchstart', function(e) {
+    const touch = e.changedTouches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+    startTime = Date.now();
+  }, { passive: true });
+
+  opt.addEventListener('touchend', function(e) {
+    // 判断是否是点击而非滑动：位移 < 8px 且 耗时 < 300ms
+    const touch = e.changedTouches[0];
+    const dx = Math.abs(touch.clientX - startX);
+    const dy = Math.abs(touch.clientY - startY);
+    const dt = Date.now() - startTime;
+
+    if (dx > 8 || dy > 8 || dt > 300) return; // 是滑动不是点击，忽略
+
+    handleSelect(this);
+  });
+
+  // PC端用 mousedown/mouseup 防止拖拽误触
+  let mouseDownPos = null;
+  opt.addEventListener('mousedown', function(e) {
+    mouseDownPos = { x: e.clientX, y: e.clientY };
+  });
+  opt.addEventListener('mouseup', function(e) {
+    if (!mouseDownPos) return;
+    const dx = Math.abs(e.clientX - mouseDownPos.x);
+    const dy = Math.abs(e.clientY - mouseDownPos.y);
+    if (dx > 3 || dy > 3) return;
+    handleSelect(this);
   });
 });
+
+function handleSelect(el) {
+  const parent = el.closest('.options') || el.closest('.rating-options');
+  if (!parent) return;
+
+  const isCheckbox = parent.dataset.type === 'checkbox';
+  const isRating = parent.dataset.type === 'rating';
+  const input = el.querySelector('input');
+
+  if (isRating) {
+    parent.querySelectorAll('.rating-option').forEach(o => o.classList.remove('selected'));
+    parent.querySelectorAll('.rating-option input').forEach(i => i.checked = false);
+    el.classList.add('selected');
+    if (input) input.checked = true;
+  } else if (isCheckbox) {
+    if (el.classList.contains('selected')) {
+      el.classList.remove('selected');
+      if (input) input.checked = false;
+    } else {
+      el.classList.add('selected');
+      if (input) input.checked = true;
+    }
+  } else {
+    parent.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+    parent.querySelectorAll('.option input').forEach(i => i.checked = false);
+    el.classList.add('selected');
+    if (input) input.checked = true;
+  }
+  updateProgress();
+}
 
 // 对所有 checkbox 的 change 事件做防抖：
 // 微信浏览器点击 label 时会自动触发原生 change 改变 checked 状态，

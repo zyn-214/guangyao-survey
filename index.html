@@ -55,7 +55,7 @@
 
   /* Options */
   .options{display:flex;flex-direction:column;gap:6px}
-  .option{display:flex;align-items:center;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;transition:all .2s;background:#FAFBFC;-webkit-tap-highlight-color:transparent}
+  .option{display:flex;align-items:center;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;transition:all .2s;background:#FAFBFC;-webkit-tap-highlight-color:transparent;touch-action:manipulation;-webkit-user-select:none;user-select:none}
   .option:hover{border-color:#B0BDD4;background:white}
   .option.selected{border-color:var(--primary);background:rgba(26,58,107,.04)}
   .option input{display:none}
@@ -70,7 +70,7 @@
 
   /* Rating */
   .rating-options{display:flex;justify-content:space-between;gap:5px}
-  .rating-option{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 3px 8px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;transition:all .2s;background:#FAFBFC}
+  .rating-option{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 3px 8px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;transition:all .2s;background:#FAFBFC;touch-action:manipulation;-webkit-user-select:none;user-select:none}
   .rating-option:hover{border-color:#B0BDD4}
   .rating-option.selected{border-color:var(--primary);background:rgba(26,58,107,.06)}
   .rating-num{font-size:19px;font-weight:800;color:var(--text-light);line-height:1;margin-bottom:3px}
@@ -399,6 +399,9 @@ document.querySelectorAll('.option, .rating-option').forEach(opt => {
     const dt = Date.now() - startTime;
 
     if (dx > 8 || dy > 8 || dt > 300) return; // 是滑动不是点击，忽略
+
+    // 阻止微信浏览器后续触发 click 等默认行为（关键！）
+    e.preventDefault();
 
     handleSelect(this);
   });

@@ -17,424 +17,110 @@
     --danger: #F56C6C;
     --radius: 12px;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-    font-size: 15px;
+    background: var(--bg); color: var(--text); line-height: 1.6; font-size: 15px;
     -webkit-font-smoothing: antialiased;
   }
-
-  /* Header */
   .header {
     background: linear-gradient(135deg, var(--primary) 0%, #2A5298 100%);
-    color: white;
-    padding: 30px 20px 24px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
+    color: white; padding: 28px 20px 22px; text-align: center; position: relative; overflow: hidden;
   }
-  .header::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -30%;
-    width: 300px;
-    height: 300px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 50%;
-  }
-  .header::after {
-    content: '';
-    position: absolute;
-    bottom: -40%;
-    left: -10%;
-    width: 200px;
-    height: 200px;
-    background: rgba(255,255,255,0.03);
-    border-radius: 50%;
-  }
-  .header-badge {
-    display: inline-block;
-    background: var(--accent);
-    color: #1a1a1a;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 3px 12px;
-    border-radius: 20px;
-    margin-bottom: 10px;
-    letter-spacing: 1px;
-  }
-  .header h1 {
-    font-size: 21px;
-    font-weight: 800;
-    margin-bottom: 6px;
-    letter-spacing: 1px;
-    position: relative;
-    z-index: 1;
-  }
-  .header p {
-    font-size: 13px;
-    opacity: 0.85;
-    position: relative;
-    z-index: 1;
-  }
+  .header::before{content:'';position:absolute;top:-50%;right:-30%;width:300px;height:300px;background:rgba(255,255,255,0.05);border-radius:50%}
+  .header::after{content:'';position:absolute;bottom:-40%;left:-10%;width:200px;height:200px;background:rgba(255,255,255,0.03);border-radius:50%}
+  .header-badge{display:inline-block;background:var(--accent);color:#1a1a1a;font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;margin-bottom:8px;letter-spacing:1px}
+  .header h1{font-size:21px;font-weight:800;margin-bottom:4px;letter-spacing:1px;position:relative;z-index:1}
+  .header p{font-size:12.5px;opacity:.85;position:relative;z-index:1;line-height:1.5}
+  .header-info{margin-top:10px;font-size:11px;opacity:.75;position:relative;z-index:1;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 
-  /* Container */
-  .container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 16px 16px 90px;
-  }
+  .container{max-width:600px;margin:0 auto;padding:14px 16px 90px}
 
-  /* Section */
-  .section {
-    background: var(--card-bg);
-    border-radius: var(--radius);
-    padding: 22px 18px;
-    margin-bottom: 14px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    border: 1px solid rgba(0,0,0,0.04);
-  }
-  .section-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--primary);
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid var(--bg);
-  }
-  .section-icon {
-    width: 28px;
-    height: 28px;
-    background: linear-gradient(135deg, var(--primary), #3A62B8);
-    color: white;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    font-weight: 900;
-    flex-shrink: 0;
-  }
-  .section-desc {
-    font-size: 13px;
-    color: var(--text-light);
-    margin-top: -10px;
-    margin-bottom: 14px;
-    line-height: 1.5;
-  }
+  .section{background:var(--card-bg);border-radius:var(--radius);padding:20px 18px;margin-bottom:13px;box-shadow:0 2px 8px rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.04)}
+  .section-title{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:var(--primary);margin-bottom:5px}
+  .section-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--primary),#3A62B8);color:white;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex-shrink:0}
+  .section-desc{font-size:12.5px;color:var(--text-light);margin-top:2px;margin-bottom:14px;line-height:1.5}
 
-  /* Question */
-  .question {
-    margin-bottom: 16px;
-  }
-  .question:last-child { margin-bottom: 0; }
-  .q-label {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 8px;
-    display: flex;
-    align-items: baseline;
-    gap: 4px;
-  }
-  .q-label .required {
-    color: var(--danger);
-    font-size: 15px;
-    font-weight: 700;
-    flex-shrink: 0;
-  }
+  .question{margin-bottom:15px}.question:last-child{margin-bottom:0}
+  .q-label{font-size:14px;font-weight:600;color:var(--text);margin-bottom:8px;display:flex;align-items:baseline;gap:4px}
+  .q-label .required{color:var(--danger);font-size:15px;font-weight:700;flex-shrink:0}
+  .q-hint{font-size:12px;color:var(--text-light);margin-top:2px;font-style:normal}
 
-  /* Input & Textarea */
-  input[type="text"], textarea, select {
-    width: 100%;
-    padding: 11px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: 9px;
-    font-size: 14px;
-    color: var(--text);
-    background: #FAFBFC;
-    transition: all 0.25s;
-    font-family: inherit;
-    -webkit-appearance: none;
-    appearance: none;
+  input[type="text"],textarea,select{
+    width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;color:var(--text);background:#FAFBFC;transition:all .25s;font-family:inherit;-webkit-appearance:none;appearance:none
   }
-  textarea {
-    resize: vertical;
-    min-height: 70px;
-    line-height: 1.5;
-  }
-  input[type="text"]:focus, textarea:focus, select:focus {
-    outline: none;
-    border-color: var(--primary);
-    background: white;
-    box-shadow: 0 0 0 3px rgba(26,58,107,0.08);
-  }
-  select {
-    cursor: pointer;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7A9A' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    padding-right: 32px;
-  }
+  textarea{resize:vertical;min-height:70px;line-height:1.5}
+  input[type="text"]:focus,textarea:focus,select:focus{outline:none;border-color:var(--primary);background:white;box-shadow:0 0 0 3px rgba(26,58,107,.08)}
+  select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7A9A' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
 
-  /* Radio / Checkbox */
-  .options {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-  }
-  .option {
-    display: flex;
-    align-items: center;
-    padding: 10px 12px;
-    border: 1.5px solid var(--border);
-    border-radius: 9px;
-    cursor: pointer;
-    transition: all 0.2s;
-    background: #FAFBFC;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .option:hover { border-color: #B0BDD4; background: white; }
-  .option.selected {
-    border-color: var(--primary);
-    background: rgba(26,58,107,0.04);
-  }
-  .option input {
-    display: none;
-  }
-  .opt-marker {
-    width: 19px;
-    height: 19px;
-    border: 2px solid #BDC6D8;
-    border-radius: 50%;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 10px;
-    transition: all 0.2s;
-  }
-  .option.checkbox .opt-marker {
-    border-radius: 5px;
-  }
-  .option.selected .opt-marker {
-    border-color: var(--primary);
-    background: var(--primary);
-  }
-  .opt-marker::after {
-    content: '';
-    display: block;
-    width: 6px;
-    height: 6px;
-    background: white;
-    border-radius: 50%;
-    transform: scale(0);
-    transition: transform 0.2s;
-  }
-  .option.checkbox .opt-marker::after {
-    width: 9px;
-    height: 5px;
-    border-left: 2px solid white;
-    border-bottom: 2px solid white;
-    border-radius: 0;
-    background: none;
-    transform: rotate(-45deg) scale(0);
-    margin-top: -2px;
-  }
-  .option.selected .opt-marker::after {
-    transform: scale(1) rotate(-45deg);
-  }
-  .option.selected:not(.checkbox) .opt-marker::after {
-    transform: scale(1);
-  }
-  .opt-text {
-    font-size: 14px;
-    color: var(--text);
-  }
+  /* Options */
+  .options{display:flex;flex-direction:column;gap:6px}
+  .option{display:flex;align-items:center;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;transition:all .2s;background:#FAFBFC;-webkit-tap-highlight-color:transparent}
+  .option:hover{border-color:#B0BDD4;background:white}
+  .option.selected{border-color:var(--primary);background:rgba(26,58,107,.04)}
+  .option input{display:none}
+  .opt-marker{width:19px;height:19px;border:2px solid #BDC6D8;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-right:10px;transition:all .2s}
+  .option.checkbox .opt-marker{border-radius:5px}
+  .option.selected .opt-marker{border-color:var(--primary);background:var(--primary)}
+  .opt-marker::after{content:'';display:block;width:6px;height:6px;background:white;border-radius:50%;transform:scale(0);transition:transform .2s}
+  .option.checkbox .opt-marker::after{width:9px;height:5px;border-left:2px solid white;border-bottom:2px solid white;border-radius:0;background:none;transform:rotate(-45deg) scale(0);margin-top:-2px}
+  .option.selected.checkbox .opt-marker::after{transform:scale(1) rotate(-45deg)}
+  .option.selected:not(.checkbox) .opt-marker::after{transform:scale(1)}
+  .opt-text{font-size:14px;color:var(--text)}
 
   /* Rating */
-  .rating-options {
-    display: flex;
-    justify-content: space-between;
-    gap: 6px;
-  }
-  .rating-option {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px 4px 8px;
-    border: 1.5px solid var(--border);
-    border-radius: 9px;
-    cursor: pointer;
-    transition: all 0.2s;
-    background: #FAFBFC;
-  }
-  .rating-option:hover { border-color: #B0BDD4; }
-  .rating-option.selected {
-    border-color: var(--primary);
-    background: rgba(26,58,107,0.06);
-  }
-  .rating-num {
-    font-size: 20px;
-    font-weight: 800;
-    color: var(--text-light);
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-  .rating-option.selected .rating-num {
-    color: var(--primary);
-  }
-  .rating-label {
-    font-size: 11px;
-    color: var(--text-light);
-    text-align: center;
-    white-space: nowrap;
-  }
+  .rating-options{display:flex;justify-content:space-between;gap:5px}
+  .rating-option{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 3px 8px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;transition:all .2s;background:#FAFBFC}
+  .rating-option:hover{border-color:#B0BDD4}
+  .rating-option.selected{border-color:var(--primary);background:rgba(26,58,107,.06)}
+  .rating-num{font-size:19px;font-weight:800;color:var(--text-light);line-height:1;margin-bottom:3px}
+  .rating-option.selected .rating-num{color:var(--primary)}
+  .rating-label{font-size:10.5px;color:var(--text-light);text-align:center;white-space:nowrap;line-height:1.25}
 
-  /* Submit */
-  .submit-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 14px 16px;
-    background: rgba(255,255,255,0.94);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-top: 1px solid var(--border);
-    z-index: 100;
-  }
-  .submit-btn {
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, var(--primary), #3A62B8);
-    color: white;
-    border: none;
-    border-radius: 11px;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    letter-spacing: 2px;
-    transition: all 0.3s;
-    box-shadow: 0 4px 14px rgba(26,58,107,0.3);
-  }
-  .submit-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(26,58,107,0.35);
-  }
-  .submit-btn:active { transform: translateY(0); }
-  .submit-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
+  /* Sub-group */
+  .sub-group{margin-left:8px;border-left:3px solid #EDF0F5;padding-left:12px;margin-top:8px}
+  .sub-group-title{font-size:13px;font-weight:600;color:var(--text-light);margin-bottom:6px}
 
-  /* Progress bar */
-  .progress-wrap {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 0 16px 10px;
-    position: sticky;
-    top: 0;
-    background: var(--bg);
-    z-index: 50;
-  }
-  .progress-info {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: var(--text-light);
-    margin-bottom: 5px;
-  }
-  .progress-track {
-    height: 5px;
-    background: #E4E7ED;
-    border-radius: 3px;
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--primary));
-    border-radius: 3px;
-    width: 0%;
-    transition: width 0.35s ease;
-  }
+  /* Submit bar */
+  .submit-bar{position:fixed;bottom:0;left:0;right:0;max-width:600px;margin:0 auto;padding:14px 16px;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--border);z-index:100}
+  .submit-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--primary),#3A62B8);color:white;border:none;border-radius:11px;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:2px;transition:all .3s;box-shadow:0 4px 14px rgba(26,58,107,.3)}
+  .submit-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(26,58,107,.35)}
+  .submit-btn:active{transform:translateY(0)}
 
-  /* Success overlay */
-  .overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    padding: 30px;
-  }
-  .overlay.show { display: flex; }
-  .result-card {
-    background: white;
-    border-radius: 16px;
-    padding: 36px 28px;
-    text-align: center;
-    max-width: 360px;
-    width: 100%;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-  }
-  .result-icon {
-    font-size: 56px;
-    margin-bottom: 14px;
-  }
-  .result-card h2 {
-    font-size: 19px;
-    color: var(--text);
-    margin-bottom: 8px;
-  }
-  .result-card p {
-    font-size: 13px;
-    color: var(--text-light);
-    line-height: 1.6;
-  }
+  /* Progress */
+  .progress-wrap{max-width:600px;margin:0 auto;padding:0 16px 8px;position:sticky;top:0;background:var(--bg);z-index:50}
+  .progress-info{display:flex;justify-content:space-between;font-size:12px;color:var(--text-light);margin-bottom:4px}
+  .progress-track{height:5px;background:#E4E7ED;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--primary));border-radius:3px;width:0%;transition:width .35s ease}
 
-  /* Error highlight */
-  .error { border-color: var(--danger) !important; animation: shake 0.4s; }
-  @keyframes shake {
-    0%,100%{transform:translateX(0)}
-    25%{transform:translateX(-5px)}
-    75%{transform:translateX(5px)}
-  }
+  /* Overlay */
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:30px}
+  .overlay.show{display:flex}
+  .result-card{background:white;border-radius:16px;padding:36px 28px;text-align:center;max-width:360px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+  .result-icon{font-size:56px;margin-bottom:14px}
+  .result-card h2{font-size:19px;color:var(--text);margin-bottom:8px}
+  .result-card p{font-size:13px;color:var(--text-light);line-height:1.6}
 
-  @media (max-width: 400px) {
-    body { font-size: 14px; }
-    .container { padding: 12px 12px 86px; }
-    .section { padding: 18px 14px; }
-    .header { padding: 24px 16px 20px; }
-    .header h1 { font-size: 19px; }
-  }
+  .error{border-color:var(--danger)!important;animation:shake .4s}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+  @media(max-width:400px){body{font-size:14px}.container{padding:12px 12px 86px}.section{padding:17px 14px}.header{padding:24px 16px 18px}.header h1{font-size:19px}}
 </style>
 </head>
 <body>
 
-<!-- Header -->
 <div class="header">
   <div class="header-badge">AI 赋能 · 共创未来</div>
-  <h1>光耀集团AI培训调研</h1>
-  <p>本问卷旨在了解大家AI使用情况与培训需求，为后续培训设计提供依据</p>
+  <h1>光耀集团AI赋能培训</h1>
+  <p>前期调研问卷</p>
+  <p style="margin-top:8px">本问卷旨在全面了解各位同事的AI工具使用现状与真实需求，<br>帮助讲师精准定制课程内容，让培训真正解决您的工作痛点。</p>
+  <div class="header-info">
+    <span>⏱ 预计用时 5~8 分钟</span><span>|</span>
+    <span>🔒 数据仅用于培训设计</span><span>|</span>
+    <span>📋 全员必填</span>
+  </div>
 </div>
 
-<!-- Progress -->
 <div class="progress-wrap">
   <div class="progress-info"><span id="progressText">完成进度</span><span id="progressPct">0%</span></div>
   <div class="progress-track"><div class="progress-fill" id="progressBar"></div></div>
@@ -442,202 +128,273 @@
 
 <form id="surveyForm">
 
-<!-- A. 基本信息 -->
-<div class="section" data-section="basic">
-  <div class="section-title"><div class="section-icon">A</div>基本信息</div>
-  <div class="section-desc">请填写您的基本信息，便于我们分类统计。</div>
+<!-- ==================== A. 个人基本信息 ==================== -->
+<div class="section">
+  <div class="section-title"><div class="section-icon">A</div>个人基本信息</div>
+  <div class="section-desc">帮助讲师了解学员背景，按岗位设计差异化案例</div>
 
   <div class="question">
-    <label class="q-label"><span class="required">*</span> 1. 您的姓名</label>
-    <input type="text" name="name" placeholder="请输入您的姓名" required data-required="true">
+    <label class="q-label"><span class="required">*</span> A1. 您的姓名</label>
+    <input type="text" name="name" placeholder="请填写您的姓名" required data-required="true">
   </div>
 
   <div class="question">
-    <label class="q-label"><span class="required">*</span> 2. 所属子公司/部门</label>
-    <select name="company" required data-required="true">
-      <option value="">请选择您的子公司/部门</option>
-      <option value="光耀地产">光耀地产</option>
-      <option value="光耀置业">光耀置业</option>
-      <option value="光耀物业">光耀物业</option>
-      <option value="光耀酒店">光耀酒店</option>
-      <option value="光耀商业">光耀商业</option>
-      <option value="集团总部">集团总部</option>
-      <option value="其他">其他</option>
-    </select>
+    <label class="q-label"><span class="required">*</span> A2. 所在部门 / 子公司</label>
+    <p class="q-hint">板块 / 子公司（单选）：</p>
+    <div class="options" data-name="company" data-type="radio" data-required="true">
+      <label class="option"><input type="radio" name="company" value="光耀板块"> <span class="opt-marker"></span><span class="opt-text">光耀板块</span></label>
+      <label class="option"><input type="radio" name="company" value="美食街商业"> <span class="opt-marker"></span><span class="opt-text">美食街商业</span></label>
+      <label class="option"><input type="radio" name="company" value="光耀物业"> <span class="opt-marker"></span><span class="opt-text">光耀物业</span></label>
+      <label class="option"><input type="radio" name="company" value="光耀酒店"> <span class="opt-marker"></span><span class="opt-text">光耀酒店</span></label>
+      <label class="option"><input type="radio" name="company" value="鲸锐体育"> <span class="opt-marker"></span><span class="opt-text">鲸锐体育</span></label>
+      <label class="option"><input type="radio" name="company" value="乐刻健身"> <span class="opt-marker"></span><span class="opt-text">乐刻健身</span></label>
+      <label class="option"><input type="radio" name="company" value="集团总部"> <span class="opt-marker"></span><span class="opt-text">集团总部</span></label>
+      <label class="option"><input type="radio" name="company" value="昱辉置业"> <span class="opt-marker"></span><span class="opt-text">昱辉置业</span></label>
+      <label class="option"><input type="radio" name="company" value="鹿鸣互动"> <span class="opt-marker"></span><span class="opt-text">鹿鸣互动</span></label>
+    </div>
   </div>
 
   <div class="question">
-    <label class="q-label"><span class="required">*</span> 3. 当前岗位/职务</label>
-    <input type="text" name="position" placeholder="请输入您的当前岗位或职务" required data-required="true">
+    <p class="q-hint" style="margin-bottom:8px">具体业务部门或层级（单选）：</p>
+    <div class="sub-group">
+      <div class="options" data-name="department" data-type="radio" data-required="true">
+        <label class="option"><input type="radio" name="department" value="高管/管理层"> <span class="opt-marker"></span><span class="opt-text">高管/管理层</span></label>
+        <label class="option"><input type="radio" name="department" value="人事/行政/综合管理"> <span class="opt-marker"></span><span class="opt-text">人事/行政/综合管理</span></label>
+        <label class="option"><input type="radio" name="department" value="财务管理"> <span class="opt-marker"></span><span class="opt-text">财务管理</span></label>
+        <label class="option"><input type="radio" name="department" value="成本管理"> <span class="opt-marker"></span><span class="opt-text">成本管理</span></label>
+        <label class="option"><input type="radio" name="department" value="销售/营销"> <span class="opt-marker"></span><span class="opt-text">销售/营销</span></label>
+        <label class="option"><input type="radio" name="department" value="策划/品牌"> <span class="opt-marker"></span><span class="opt-text">策划/品牌</span></label>
+        <label class="option"><input type="radio" name="department" value="工程/技术"> <span class="opt-marker"></span><span class="opt-text">工程/技术</span></label>
+        <label class="option"><input type="radio" name="department" value="采购/供应链"> <span class="opt-marker"></span><span class="opt-text">采购/供应链</span></label>
+        <label class="option"><input type="radio" name="department" value="客服/物业服务"> <span class="opt-marker"></span><span class="opt-text">客服/物业服务</span></label>
+        <label class="option"><input type="radio" name="department" value="IT/数字化"> <span class="opt-marker"></span><span class="opt-text">IT/数字化</span></label>
+        <label class="option"><input type="radio" name="department" value="其他"> <span class="opt-marker"></span><span class="opt-text">其他</span></label>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- B. AI工具使用现状 -->
-<div class="section" data-section="usage">
+<!-- ==================== B. AI工具使用现状 ==================== -->
+<div class="section">
   <div class="section-title"><div class="section-icon">B</div>AI工具使用现状</div>
-  <div class="section-desc">了解您目前对AI工具的使用频率和场景。</div>
+  <div class="section-desc">了解您目前对各类AI工具的接触程度和使用习惯</div>
 
   <div class="question">
-    <label class="q-label"><span class="required">*</span> 4. 您目前使用AI工具的频率是？</label>
+    <label class="q-label"><span class="required">*</span> B1. 您目前使用AI工具的频率是？（单选）</label>
     <div class="options" data-name="frequency" data-type="radio" data-required="true">
-      <label class="option"><input type="radio" name="frequency" value="每天使用"> <span class="opt-marker"></span><span class="opt-text">每天使用</span></label>
-      <label class="option"><input type="radio" name="frequency" value="每周几次"> <span class="opt-marker"></span><span class="opt-text">每周几次</span></label>
-      <label class="option"><input type="radio" name="frequency" value="偶尔用"> <span class="opt-marker"></span><span class="opt-text">偶尔用</span></label>
+      <label class="option"><input type="radio" name="frequency" value="每天使用，已融入日常工作"> <span class="opt-marker"></span><span class="opt-text">每天使用，已融入日常工作</span></label>
+      <label class="option"><input type="radio" name="frequency" value="每周几次，偶尔想起来用一下"> <span class="opt-marker"></span><span class="opt-text">每周几次，偶尔想起来用一下</span></label>
+      <label class="option"><input type="radio" name="frequency" value="试用过一两次，但没坚持下来"> <span class="opt-marker"></span><span class="opt-text">试用过一两次，但没坚持下来</span></label>
       <label class="option"><input type="radio" name="frequency" value="从未用过"> <span class="opt-marker"></span><span class="opt-text">从未用过</span></label>
     </div>
   </div>
 
   <div class="question">
-    <label class="q-label"><span class="required">*</span> 5. 您常用哪些AI工具？（可多选）</label>
+    <label class="q-label"><span class="required">*</span> B2. 您常用哪些AI工具？（可多选）</label>
     <div class="options" data-name="tools" data-type="checkbox" data-required="true">
-      <label class="option checkbox"><input type="checkbox" name="tools" value="ChatGPT/DeepSeek等AI对话"> <span class="opt-marker"></span><span class="opt-text">ChatGPT/DeepSeek等AI对话</span></label>
-      <label class="option checkbox"><input type="checkbox" name="tools" value="文心一言/通义千问等国产AI"> <span class="opt-marker"></span><span class="opt-text">文心一言/通义千问等国产AI</span></label>
-      <label class="option checkbox"><input type="checkbox" name="tools" value="AI写作/润色工具"> <span class="opt-marker"></span><span class="opt-text">AI写作/润色工具</span></label>
-      <label class="option checkbox"><input type="checkbox" name="tools" value="AI绘图/AI设计"> <span class="opt-marker"></span><span class="opt-text">AI绘图/AI设计</span></label>
-      <label class="option checkbox"><input type="checkbox" name="tools" value="AI翻译"> <span class="opt-marker"></span><span class="opt-text">AI翻译</span></label>
+      <label class="option checkbox"><input type="checkbox" name="tools" value="ChatGPT（OpenAI官方版）"> <span class="opt-marker"></span><span class="opt-text">ChatGPT（OpenAI官方版）</span></label>
+      <label class="option checkbox"><input type="checkbox" name="tools" value="DeepSeek"> <span class="opt-marker"></span><span class="opt-text">DeepSeek</span></label>
+      <label class="option checkbox"><input type="checkbox" name="tools" value="文心一言（百度）"> <span class="opt-marker"></span><span class="opt-text">文心一言（百度）</span></label>
+      <label class="option checkbox"><input type="checkbox" name="tools" value="通义千问（阿里）"> <span class="opt-marker"></span><span class="opt-text">通义千问（阿里）</span></label>
+      <label class="option checkbox"><input type="checkbox" name="tools" value="豆包（字节跳动）"> <span class="opt-marker"></span><span class="opt-text">豆包（字节跳动）</span></label>
+      <label class="option checkbox"><input type="checkbox" name="tools" value="Kimi（月之暗面）"> <span class="opt-marker"></span><span class="opt-text">Kimi（月之暗面）</span></label>
+      <label class="option checkbox"><input type="checkbox" name="tools" value="腾讯元宝"> <span class="opt-marker"></span><span class="opt-text">腾讯元宝</span></label>
+      <label class="option checkbox"><input type="checkbox" name="tools" value="AI写作工具（如秘塔搜索、WPS AI等）"> <span class="opt-marker"></span><span class="opt-text">AI写作工具（如秘塔搜索、WPS AI等）</span></label>
+      <label class="option checkbox"><input type="checkbox" name="tools" value="AI绘图工具（如Midjourney、可灵等）"> <span class="opt-marker"></span><span class="opt-text">AI绘图工具（如Midjourney、可灵等）</span></label>
       <label class="option checkbox"><input type="checkbox" name="tools" value="其他"> <span class="opt-marker"></span><span class="opt-text">其他</span></label>
     </div>
   </div>
 
   <div class="question">
-    <label class="q-label"><span class="required">*</span> 6. 工作中，您主要在哪些场景使用过AI？（可多选）</label>
+    <label class="q-label"><span class="required">*</span> B3. 在工作中，您主要在哪些场景使用过AI？（可多选）</label>
     <div class="options" data-name="scenes" data-type="checkbox" data-required="true">
-      <label class="option checkbox"><input type="checkbox" name="scenes" value="文案写作/公文撰写"> <span class="opt-marker"></span><span class="opt-text">文案写作/公文撰写</span></label>
-      <label class="option checkbox"><input type="checkbox" name="scenes" value="数据分析/报表处理"> <span class="opt-marker"></span><span class="opt-text">数据分析/报表处理</span></label>
-      <label class="option checkbox"><input type="checkbox" name="scenes" value="PPT制作/汇报材料"> <span class="opt-marker"></span><span class="opt-text">PPT制作/汇报材料</span></label>
-      <label class="option checkbox"><input type="checkbox" name="scenes" value="邮件/通知草拟"> <span class="opt-marker"></span><span class="opt-text">邮件/通知草拟</span></label>
-      <label class="option checkbox"><input type="checkbox" name="scenes" value="方案策划"> <span class="opt-marker"></span><span class="opt-text">方案策划</span></label>
-      <label class="option checkbox"><input type="checkbox" name="scenes" value="客户沟通"> <span class="opt-marker"></span><span class="opt-text">客户沟通</span></label>
-      <label class="option checkbox"><input type="checkbox" name="scenes" value="日常办公"> <span class="opt-marker"></span><span class="opt-text">日常办公</span></label>
+      <label class="option checkbox"><input type="checkbox" name="scenes" value="文案写作 / 公文撰写 / 会议纪要"> <span class="opt-marker"></span><span class="opt-text">文案写作 / 公文撰写 / 会议纪要</span></label>
+      <label class="option checkbox"><input type="checkbox" name="scenes" value="数据分析 / 报表处理 / Excel公式生成"> <span class="opt-marker"></span><span class="opt-text">数据分析 / 报表处理 / Excel公式生成</span></label>
+      <label class="option checkbox"><input type="checkbox" name="scenes" value="PPT制作 / 汇报材料美化"> <span class="opt-marker"></span><span class="opt-text">PPT制作 / 汇报材料美化</span></label>
+      <label class="option checkbox"><input type="checkbox" name="scenes" value="邮件 / 通知草拟"> <span class="opt-marker"></span><span class="opt-text">邮件 / 通知草拟</span></label>
+      <label class="option checkbox"><input type="checkbox" name="scenes" value="方案策划 / 营销文案"> <span class="opt-marker"></span><span class="opt-text">方案策划 / 营销文案</span></label>
+      <label class="option checkbox"><input type="checkbox" name="scenes" value="客户沟通 / 话术准备"> <span class="opt-marker"></span><span class="opt-text">客户沟通 / 话术准备</span></label>
+      <label class="option checkbox"><input type="checkbox" name="scenes" value="翻译 / 语言润色"> <span class="opt-marker"></span><span class="opt-text">翻译 / 语言润色</span></label>
+      <label class="option checkbox"><input type="checkbox" name="scenes" value="代码编写 / IT开发辅助"> <span class="opt-marker"></span><span class="opt-text">代码编写 / IT开发辅助</span></label>
+      <label class="option checkbox"><input type="checkbox" name="scenes" value="图片处理 / 设计素材生成"> <span class="opt-marker"></span><span class="opt-text">图片处理 / 设计素材生成</span></label>
+      <label class="option checkbox"><input type="checkbox" name="scenes" value="视频剪辑 / 短视频脚本"> <span class="opt-marker"></span><span class="opt-text">视频剪辑 / 短视频脚本</span></label>
+      <label class="option checkbox"><input type="checkbox" name="scenes" value="日常问答 / 知识查询"> <span class="opt-marker"></span><span class="opt-text">日常问答 / 知识查询</span></label>
+      <label class="option checkbox"><input type="checkbox" name="scenes" value="尚未在工作中使用过"> <span class="opt-marker"></span><span class="opt-text">尚未在工作中使用过</span></label>
       <label class="option checkbox"><input type="checkbox" name="scenes" value="其他"> <span class="opt-marker"></span><span class="opt-text">其他</span></label>
     </div>
   </div>
 
   <div class="question">
-    <label class="q-label"><span class="required">*</span> 7. 您觉得自己目前对AI的了解程度？（1-5分）</label>
+    <label class="q-label"><span class="required">*</span> B4. 您觉得自己目前对AI的了解程度？（1-5分打分）</label>
     <div class="rating-options" data-name="aiLevel" data-type="rating" data-required="true">
-      <label class="rating-option"><input type="radio" name="aiLevel" value="1"> <span class="rating-num">1</span><span class="rating-label">完全不了解</span></label>
-      <label class="rating-option"><input type="radio" name="aiLevel" value="2"> <span class="rating-num">2</span><span class="rating-label">听说过一点</span></label>
-      <label class="rating-option"><input type="radio" name="aiLevel" value="3"> <span class="rating-num">3</span><span class="rating-label">基本了解</span></label>
-      <label class="rating-option"><input type="radio" name="aiLevel" value="4"> <span class="rating-num">4</span><span class="rating-label">比较熟悉</span></label>
-      <label class="rating-option"><input type="radio" name="aiLevel" value="5"> <span class="rating-num">5</span><span class="rating-label">非常精通</span></label>
+      <label class="rating-option"><input type="radio" name="aiLevel" value="1"> <span class="rating-num">1</span><span class="rating-label">完全不了解<br>听说但不清楚是什么</span></label>
+      <label class="rating-option"><input type="radio" name="aiLevel" value="2"> <span class="rating-num">2</span><span class="rating-label">略知一二<br>知道基本概念但没用过</span></label>
+      <label class="rating-option"><input type="radio" name="aiLevel" value="3"> <span class="rating-num">3</span><span class="rating-label">基本了解<br>用过几个工具但不太熟练</span></label>
+      <label class="rating-option"><input type="radio" name="aiLevel" value="4"> <span class="rating-num">4</span><span class="rating-label">比较熟悉<br>经常使用且知道怎么用好</span></label>
+      <label class="rating-option"><input type="radio" name="aiLevel" value="5"> <span class="rating-num">5</span><span class="rating-label">非常精通<br>深度用户，能给他人指导</span></label>
     </div>
   </div>
 </div>
 
-<!-- C. 痛点与困扰 -->
-<div class="section" data-section="pain">
-  <div class="section-title"><div class="section-icon">C</div>痛点与困扰</div>
-  <div class="section-desc">告诉我们使用AI过程中遇到的主要障碍。</div>
+<!-- ==================== C. 培训期望与需求 ==================== -->
+<div class="section">
+  <div class="section-title"><div class="section-icon">C</div>培训期望与需求</div>
+  <div class="section-desc">告诉我们您最想从培训中获得什么</div>
 
   <div class="question">
-    <label class="q-label"><span class="required">*</span> 8. 目前使用AI时，您最大的困扰是什么？（可多选）</label>
-    <div class="options" data-name="problems" data-type="checkbox" data-required="true">
-      <label class="option checkbox"><input type="checkbox" name="problems" value="不知道怎么用好提示词"> <span class="opt-marker"></span><span class="opt-text">不知道怎么用好提示词</span></label>
-      <label class="option checkbox"><input type="checkbox" name="problems" value="担心数据安全/信息泄露"> <span class="opt-marker"></span><span class="opt-text">担心数据安全/信息泄露</span></label>
-      <label class="option checkbox"><input type="checkbox" name="problems" value="效果不稳定不好用"> <span class="opt-marker"></span><span class="opt-text">效果不稳定不好用</span></label>
-      <label class="option checkbox"><input type="checkbox" name="problems" value="没有合适的工具/账号"> <span class="opt-marker"></span><span class="opt-text">没有合适的工具/账号</span></label>
-      <label class="option checkbox"><input type="checkbox" name="problems" value="领导不支持/公司没推广"> <span class="opt-marker"></span><span class="opt-text">领导不支持/公司没推广</span></label>
-      <label class="option checkbox"><input type="checkbox" name="problems" value="没时间学"> <span class="opt-marker"></span><span class="opt-text">没时间学</span></label>
-      <label class="option checkbox"><input type="checkbox" name="problems" value="其他"> <span class="opt-marker"></span><span class="opt-text">其他</span></label>
-    </div>
-  </div>
-</div>
-
-<!-- D. 培训需求 -->
-<div class="section" data-section="needs">
-  <div class="section-title"><div class="section-icon">D</div>培训需求</div>
-  <div class="section-desc">您希望获得什么样的AI相关培训？</div>
-
-  <div class="question">
-    <label class="q-label"><span class="required">*</span> 9. 您最希望提升哪些AI能力？（可多选）</label>
+    <label class="q-label"><span class="required">*</span> C1. 您最希望提升哪些AI能力？（可多选，最多选5项）</label>
     <div class="options" data-name="needs" data-type="checkbox" data-required="true">
-      <label class="option checkbox"><input type="checkbox" name="needs" value="高效提示词编写"> <span class="opt-marker"></span><span class="opt-text">高效提示词编写</span></label>
-      <label class="option checkbox"><input type="checkbox" name="needs" value="AI+Office办公效率"> <span class="opt-marker"></span><span class="opt-text">AI+Office办公效率</span></label>
-      <label class="option checkbox"><input type="checkbox" name="needs" value="AI数据分析"> <span class="opt-marker"></span><span class="opt-text">AI数据分析</span></label>
-      <label class="option checkbox"><input type="checkbox" name="needs" value="AI文案写作"> <span class="opt-marker"></span><span class="opt-text">AI文案写作</span></label>
-      <label class="option checkbox"><input type="checkbox" name="needs" value="AI设计/PPT制作"> <span class="opt-marker"></span><span class="opt-text">AI设计/PPT制作</span></label>
-      <label class="option checkbox"><input type="checkbox" name="needs" value="AI在具体业务场景应用"> <span class="opt-marker"></span><span class="opt-text">AI在具体业务场景应用</span></label>
+      <label class="option checkbox"><input type="checkbox" name="needs" value="高效提示词（Prompt）编写技巧"> <span class="opt-marker"></span><span class="opt-text">高效提示词（Prompt）编写技巧</span></label>
+      <label class="option checkbox"><input type="checkbox" name="needs" value="AI + Word/WPS：智能写作与文档处理"> <span class="opt-marker"></span><span class="opt-text">AI + Word/WPS：智能写作与文档处理</span></label>
+      <label class="option checkbox"><input type="checkbox" name="needs" value="AI + Excel：数据分析与自动化报表"> <span class="opt-marker"></span><span class="opt-text">AI + Excel：数据分析与自动化报表</span></label>
+      <label class="option checkbox"><input type="checkbox" name="needs" value="AI + PPT：快速制作专业演示文稿"> <span class="opt-marker"></span><span class="opt-text">AI + PPT：快速制作专业演示文稿</span></label>
+      <label class="option checkbox"><input type="checkbox" name="needs" value="AI在具体业务场景中的应用（如营销、客服、人事等）"> <span class="opt-marker"></span><span class="opt-text">AI在具体业务场景中的应用（如营销、客服、人事等）</span></label>
+      <label class="option checkbox"><input type="checkbox" name="needs" value="AI绘画与设计素材生成"> <span class="opt-marker"></span><span class="opt-text">AI绘画与设计素材生成</span></label>
+      <label class="option checkbox"><input type="checkbox" name="needs" value="如何判断AI生成内容的准确性（防幻觉）"> <span class="opt-marker"></span><span class="opt-text">如何判断AI生成内容的准确性（防幻觉）</span></label>
+      <label class="option checkbox"><input type="checkbox" name="needs" value="企业信息安全与合规使用指南"> <span class="opt-marker"></span><span class="opt-text">企业信息安全与合规使用指南</span></label>
       <label class="option checkbox"><input type="checkbox" name="needs" value="其他"> <span class="opt-marker"></span><span class="opt-text">其他</span></label>
     </div>
   </div>
 
   <div class="question">
-    <label class="q-label"><span class="required">*</span> 10. 您更倾向于哪种培训形式？</label>
+    <label class="q-label"><span class="required">*</span> C2. 您更倾向于哪种培训形式？（单选）</label>
     <div class="options" data-name="format" data-type="radio" data-required="true">
-      <label class="option"><input type="radio" name="format" value="线上视频课程"> <span class="opt-marker"></span><span class="opt-text">线上视频课程</span></label>
-      <label class="option"><input type="radio" name="format" value="线下集中培训"> <span class="opt-marker"></span><span class="opt-text">线下集中培训</span></label>
-      <label class="option"><input type="radio" name="format" value="实操工作坊"> <span class="opt-marker"></span><span class="opt-text">实操工作坊</span></label>
-      <label class="option"><input type="radio" name="format" value="案例分析"> <span class="opt-marker"></span><span class="opt-text">案例分析</span></label>
-      <label class="option"><input type="radio" name="format" value="一对一辅导"> <span class="opt-marker"></span><span class="opt-text">一对一辅导</span></label>
-      <label class="option"><input type="radio" name="format" value="混合式(线上+线下)"> <span class="opt-marker"></span><span class="opt-text">混合式(线上+线下)</span></label>
+      <label class="option"><input type="radio" name="format" value="线上视频课程（自学为主）"> <span class="opt-marker"></span><span class="opt-text">线上视频课程（自学为主）</span></label>
+      <label class="option"><input type="radio" name="format" value="线下集中授课（面对面教学）"> <span class="opt-marker"></span><span class="opt-text">线下集中授课（面对面教学）</span></label>
+      <label class="option"><input type="radio" name="format" value="实操工作坊（带电脑跟着做）"> <span class="opt-marker"></span><span class="opt-text">实操工作坊（带电脑跟着做）</span></label>
+      <label class="option"><input type="radio" name="format" value="案例分析研讨（结合实际案例讨论）"> <span class="opt-marker"></span><span class="opt-text">案例分析研讨（结合实际案例讨论）</span></label>
+      <label class="option"><input type="radio" name="format" value="一对一辅导（针对个人问题解答）"> <span class="opt-marker"></span><span class="opt-text">一对一辅导（针对个人问题解答）</span></label>
+      <label class="option"><input type="radio" name="format" value="混合式（线上学习 + 线下实操）"> <span class="opt-marker"></span><span class="opt-text">混合式（线上学习 + 线下实操）</span></label>
     </div>
   </div>
 
   <div class="question">
-    <label class="q-label"><span class="required">*</span> 11. 对您来说什么时间参加培训比较合适？</label>
+    <label class="q-label"><span class="required">*</span> C3. 对您来说什么时间参加培训比较合适？（单选）</label>
     <div class="options" data-name="time" data-type="radio" data-required="true">
-      <label class="option"><input type="radio" name="time" value="工作时间内"> <span class="opt-marker"></span><span class="opt-text">工作时间内</span></label>
-      <label class="option"><input type="radio" name="time" value="下班后/周末"> <span class="opt-marker"></span><span class="opt-text">下班后/周末</span></label>
-      <label class="option"><input type="radio" name="time" value="都可以"> <span class="opt-marker"></span><span class="opt-text">都可以</span></label>
+      <label class="option"><input type="radio" name="time" value="工作日白天（占用工作时间）"> <span class="opt-marker"></span><span class="opt-text">工作日白天（占用工作时间）</span></label>
+      <label class="option"><input type="radio" name="time" value="工作日下班后（晚上）"> <span class="opt-marker"></span><span class="opt-text">工作日下班后（晚上）</span></label>
+      <label class="option"><input type="radio" name="time" value="周末（周六或周日）"> <span class="opt-marker"></span><span class="opt-text">周末（周六或周日）</span></label>
+      <label class="option"><input type="radio" name="time" value="都可以，以公司安排为准"> <span class="opt-marker"></span><span class="opt-text">都可以，以公司安排为准</span></label>
     </div>
   </div>
 </div>
 
-<!-- E. 开放建议 -->
-<div class="section" data-section="suggestion">
-  <div class="section-title"><div class="section-icon">E</div>开放建议</div>
-  <div class="section-desc">欢迎提出任何对公司AI转型的建议或期望。</div>
+<!-- ==================== D. 风险顾虑 ==================== -->
+<div class="section">
+  <div class="section-title"><div class="section-icon">D</div>风险顾虑</div>
+  <div class="section-desc">坦诚说出您的担忧，我们会在培训中针对性解决</div>
 
   <div class="question">
-    <label class="q-label">12. 对于公司推进AI转型，您有什么建议或期望？（选填）</label>
-    <textarea name="suggestion" placeholder="请输入您的建议或期望..."></textarea>
+    <label class="q-label"><span class="required">*</span> D1. 目前在使用或尝试AI工具时，您最大的困扰或顾虑是什么？（可多选）</label>
+    <div class="options" data-name="concerns" data-type="checkbox" data-required="true">
+      <label class="option checkbox"><input type="checkbox" name="concerns" value="不知道怎么写好提示词（Prompt），效果不好"> <span class="opt-marker"></span><span class="opt-text">不知道怎么写好提示词（Prompt），效果不好</span></label>
+      <label class="option checkbox"><input type="checkbox" name="concerns" value="担心数据安全 / 公司信息泄露风险"> <span class="opt-marker"></span><span class="opt-text">担心数据安全 / 公司信息泄露风险</span></label>
+      <label class="option checkbox"><input type="checkbox" name="concerns" value="AI生成的内容不准确，不敢直接使用"> <span class="opt-marker"></span><span class="opt-text">AI生成的内容不准确，不敢直接使用</span></label>
+      <label class="option checkbox"><input type="checkbox" name="concerns" value="不知道哪个工具好用，选择困难"> <span class="opt-marker"></span><span class="opt-text">不知道哪个工具好用，选择困难</span></label>
+      <label class="option checkbox"><input type="checkbox" name="concerns" value="担心被替代，影响自己岗位价值"> <span class="opt-marker"></span><span class="opt-text">担心被替代，影响自己岗位价值</span></label>
+      <label class="option checkbox"><input type="checkbox" name="concerns" value="领导不支持 / 公司没有明确推广政策"> <span class="opt-marker"></span><span class="opt-text">领导不支持 / 公司没有明确推广政策</span></label>
+      <label class="option checkbox"><input type="checkbox" name="concerns" value="没有足够的时间学习和尝试"> <span class="opt-marker"></span><span class="opt-text">没有足够的时间学习和尝试</span></label>
+      <label class="option checkbox"><input type="checkbox" name="concerns" value="无特别担心"> <span class="opt-marker"></span><span class="opt-text">无特别担心</span></label>
+      <label class="option checkbox"><input type="checkbox" name="concerns" value="其他"> <span class="opt-marker"></span><span class="opt-text">其他</span></label>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== E. 工具与设备准备 ==================== -->
+<div class="section">
+  <div class="section-title"><div class="section-icon">E</div>工具与设备准备</div>
+  <div class="section-desc">确保培训当天顺利操作，不浪费课堂时间</div>
+
+  <div class="question">
+    <label class="q-label"><span class="required">*</span> E1. 培训当天您会携带什么设备？</label>
+    <div class="options" data-name="device" data-type="checkbox" data-required="true">
+      <label class="option checkbox"><input type="checkbox" name="device" value="个人笔记本电脑（Windows）"> <span class="opt-marker"></span><span class="opt-text">个人笔记本电脑（Windows）</span></label>
+      <label class="option checkbox"><input type="checkbox" name="device" value="Mac笔记本"> <span class="opt-marker"></span><span class="opt-text">Mac笔记本</span></label>
+      <label class="option checkbox"><input type="checkbox" name="device" value="平板电脑（iPad / 安卓平板）"> <span class="opt-marker"></span><span class="opt-text">平板电脑（iPad / 安卓平板）</span></label>
+      <label class="option checkbox"><input type="checkbox" name="device" value="只有手机（无法携带电脑）"> <span class="opt-marker"></span><span class="opt-text">只有手机（无法携带电脑）</span></label>
+      <label class="option checkbox"><input type="checkbox" name="device" value="使用公司提供的公用电脑"> <span class="opt-marker"></span><span class="opt-text">使用公司提供的公用电脑</span></label>
+    </div>
+  </div>
+
+  <div class="question">
+    <label class="q-label"><span class="required">*</span> E2. 您的手机上目前已安装哪些AI应用？（可多选）</label>
+    <div class="options" data-name="mobileApps" data-type="checkbox" data-required="true">
+      <label class="option checkbox"><input type="checkbox" name="mobileApps" value="豆包"> <span class="opt-marker"></span><span class="opt-text">豆包</span></label>
+      <label class="option checkbox"><input type="checkbox" name="mobileApps" value="通义千问"> <span class="opt-marker"></span><span class="opt-text">通义千问</span></label>
+      <label class="option checkbox"><input type="checkbox" name="mobileApps" value="文心一言"> <span class="opt-marker"></span><span class="opt-text">文心一言</span></label>
+      <label class="option checkbox"><input type="checkbox" name="mobileApps" value="腾讯元宝"> <span class="opt-marker"></span><span class="opt-text">腾讯元宝</span></label>
+      <label class="option checkbox"><input type="checkbox" name="mobileApps" value="Kimi"> <span class="opt-marker"></span><span class="opt-text">Kimi</span></label>
+      <label class="option checkbox"><input type="checkbox" name="mobileApps" value="DeepSeek"> <span class="opt-marker"></span><span class="opt-text">DeepSeek</span></label>
+      <label class="option checkbox"><input type="checkbox" name="mobileApps" value="飞书（内置AI功能）"> <span class="opt-marker"></span><span class="opt-text">飞书（内置AI功能）</span></label>
+      <label class="option checkbox"><input type="checkbox" name="mobileApps" value="钉钉（内置AI功能）"> <span class="opt-marker"></span><span class="opt-text">钉钉（内置AI功能）</span></label>
+      <label class="option checkbox"><input type="checkbox" name="mobileApps" value="剪映（AI剪辑）"> <span class="opt-marker"></span><span class="opt-text">剪映（AI剪辑）</span></label>
+      <label class="option checkbox"><input type="checkbox" name="mobileApps" value="均未安装"> <span class="opt-marker"></span><span class="opt-text">均未安装</span></label>
+      <label class="option checkbox"><input type="checkbox" name="mobileApps" value="其他"> <span class="opt-marker"></span><span class="opt-text">其他</span></label>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== F. 自由表达 ==================== -->
+<div class="section">
+  <div class="section-title"><div class="section-icon">F</div>自由表达</div>
+  <div class="section-desc">您的想法是课程最好的原材料</div>
+
+  <div class="question">
+    <label class="q-label"><span class="required">*</span> F1. 您对公司推进AI落地这件事，个人的真实态度是？（单选）</label>
+    <div class="options" data-name="attitude" data-type="radio" data-required="true">
+      <label class="option"><input type="radio" name="attitude" value="非常期待，早就想学了"> <span class="opt-marker"></span><span class="opt-text">非常期待，早就想学了</span></label>
+      <label class="option"><input type="radio" name="attitude" value="感兴趣，愿意积极尝试"> <span class="opt-marker"></span><span class="opt-text">感兴趣，愿意积极尝试</span></label>
+      <label class="option"><input type="radio" name="attitude" value="无所谓，公司要求就配合"> <span class="opt-marker"></span><span class="opt-text">无所谓，公司要求就配合</span></label>
+      <label class="option"><input type="radio" name="attitude" value="有些担心，怕影响自己工作"> <span class="opt-marker"></span><span class="opt-text">有些担心，怕影响自己工作</span></label>
+      <label class="option"><input type="radio" name="attitude" value="持观望态度，效果待验证"> <span class="opt-marker"></span><span class="opt-text">持观望态度，效果待验证</span></label>
+    </div>
+  </div>
+
+  <div class="question">
+    <label class="q-label">F2. 您是否有一个具体的工作场景，希望当天在课堂上实际动手演示解决？（选填）</label>
+    <p class="q-hint">填写后讲师会尽量现场演示，越具体越好（如：每月收集各部门打卡积分、每周要写楼盘朋友圈推文等）</p>
+    <textarea name="scenario" placeholder="请描述您的具体工作场景和痛点……"></textarea>
+  </div>
+
+  <div class="question">
+    <label class="q-label">F3. 还有什么想对培训讲师说的？（问题、建议、期望都可以）（选填）</label>
+    <textarea name="feedback" placeholder="自由表达，我们认真倾听……"></textarea>
   </div>
 </div>
 
 </form>
 
-<!-- Fixed submit -->
 <div class="submit-bar">
   <button class="submit-btn" onclick="handleSubmit()">提 交 问 卷</button>
 </div>
 
-<!-- Success overlay -->
 <div class="overlay" id="successOverlay">
   <div class="result-card">
     <div class="result-icon">🎉</div>
     <h2>提交成功！</h2>
-    <p>感谢您的参与！<br>您的意见对我们非常重要。<br>问卷数据将自动汇总至后台。</p>
+    <p>感谢您的认真填写！<br>讲师将根据全体同事的反馈精心定制课程。<br>期待培训当天与您相见 🚀</p>
+    <br>
+    <p style="font-size:12px;color:#999">© 2026 新光耀集团 AI赋能工程 · 培训前期调研</p>
   </div>
 </div>
 
 <script>
 // ===== Option selection =====
-document.querySelectorAll('.option, .rating-option').forEach(opt => {
-  opt.addEventListener('click', function(e) {
-    e.preventDefault();
-    const parent = this.closest('.options') || this.closest('.rating-options');
-    if (!parent) return;
-
-    const type = parent.dataset.type;
-    const isCheckbox = (type === 'checkbox' || this.classList.contains('checkbox'));
-    const isRatingOption = this.classList.contains('rating-option');
+document.querySelectorAll('.option').forEach(opt => {
+  opt.addEventListener('click', function() {
+    const parent = this.closest('.options');
+    const isCheckbox = parent.dataset.type === 'checkbox';
+    const isRating = parent.dataset.type === 'rating';
     const input = this.querySelector('input');
 
-    if (isRatingOption) {
-      // Rating: radio behavior
+    if (isRating) {
+      // Rating: single select behavior but with visual feedback
       parent.querySelectorAll('.rating-option').forEach(o => o.classList.remove('selected'));
-      parent.querySelectorAll('input').forEach(i => i.checked = false);
       this.classList.add('selected');
       input.checked = true;
     } else if (isCheckbox) {
-      // Checkbox: toggle
+      this.classList.toggle('selected');
       input.checked = !input.checked;
-      if (input.checked) {
-        this.classList.add('selected');
-      } else {
-        this.classList.remove('selected');
-      }
     } else {
       // Radio: single select
       parent.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
@@ -647,33 +404,18 @@ document.querySelectorAll('.option, .rating-option').forEach(opt => {
     }
     updateProgress();
   });
-
-  // Prevent default on label clicks inside options
-  opt.addEventListener('mousedown', function(e) { e.preventDefault(); });
 });
 
 // ===== Progress tracking =====
 function updateProgress() {
   const requiredFields = document.querySelectorAll('[data-required="true"]');
-  const sections = document.querySelectorAll('.section');
-  let total = requiredFields.length + sections.length;
+  let total = requiredFields.length;
   let filled = 0;
 
   requiredFields.forEach(f => {
-    if (f.tagName === 'INPUT') {
-      if ((f.type === 'text' && f.value.trim()) ||
-          (f.tagName === 'SELECT' && f.value)) filled++;
-    } else if (f.classList.contains('options')) {
+    if (f.classList.contains('options')) {
       if (f.querySelector('input:checked')) filled++;
-    } else if (f.tagName === 'SELECT') {
-      if (f.value) filled++;
     }
-  });
-
-  // Check each section has at least something
-  sections.forEach(s => {
-    const inputs = s.querySelectorAll('input:checked, select[value!=""]');
-    if (inputs.length > 0) filled += 0.5;
   });
 
   const pct = Math.min(100, Math.round((filled / total) * 100));
@@ -681,7 +423,6 @@ function updateProgress() {
   document.getElementById('progressPct').textContent = pct + '%';
 }
 
-// Listen to all inputs for progress updates
 document.querySelectorAll('input, select, textarea').forEach(el => {
   el.addEventListener('change', updateProgress);
   el.addEventListener('input', updateProgress);
@@ -689,58 +430,46 @@ document.querySelectorAll('input, select, textarea').forEach(el => {
 
 // ===== Form submission =====
 function handleSubmit() {
-  // Clear previous errors
   document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
-
   let firstError = null;
-  let valid = true;
 
-  // Validate required fields
   document.querySelectorAll('[data-required="true"]').forEach(field => {
     if (field.classList.contains('options')) {
       if (!field.querySelector('input:checked')) {
         field.classList.add('error');
-        valid = false;
-        if (!firstError) firstError = field;
-      }
-    } else if (field.tagName === 'SELECT' || (field.tagName === 'INPUT' && field.type === 'text')) {
-      if (!field.value.trim()) {
-        field.classList.add('error');
-        valid = false;
         if (!firstError) firstError = field;
       }
     }
   });
 
-  if (!valid) {
+  if (firstError) {
     firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
 
-  // Collect data
   const formData = {
     timestamp: new Date().toLocaleString('zh-CN'),
     name: document.querySelector('[name="name"]').value,
-    company: document.querySelector('[name="company"]').value,
-    position: document.querySelector('[name="position"]').value,
+    company: getRadioValue('company'),
+    department: getRadioValue('department'),
     frequency: getRadioValue('frequency'),
     tools: getCheckValues('tools'),
     scenes: getCheckValues('scenes'),
     aiLevel: getRadioValue('aiLevel'),
-    problems: getCheckValues('problems'),
     needs: getCheckValues('needs'),
     format: getRadioValue('format'),
     time: getRadioValue('time'),
-    suggestion: document.querySelector('[name="suggestion"]')?.value || ''
+    concerns: getCheckValues('concerns'),
+    device: getCheckValues('device'),
+    mobileApps: getCheckValues('mobileApps'),
+    attitude: getRadioValue('attitude'),
+    scenario: document.querySelector('[name="scenario"]')?.value || '',
+    feedback: document.querySelector('[name="feedback"]')?.value || ''
   };
 
-  // Save to localStorage
   saveToStorage(formData);
 
-  // Show success
   document.getElementById('successOverlay').classList.add('show');
-
-  // Disable button
   document.querySelector('.submit-btn').disabled = true;
   document.querySelector('.submit-btn').textContent = '已提交 ✓';
 
@@ -757,21 +486,15 @@ function getCheckValues(name) {
   return Array.from(checked).map(el => el.value).join('、');
 }
 
-// ===== LocalStorage =====
 function saveToStorage(data) {
-  const key = 'survey_guangyao_ai_2026';
+  const key = 'survey_guangyao_ai_2026_v3';
   let records = [];
-  try {
-    records = JSON.parse(localStorage.getItem(key) || '[]');
-  } catch(e) {}
+  try { records = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) {}
   records.push(data);
-  try {
-    localStorage.setItem(key, JSON.stringify(records));
-  } catch(e) {}
+  try { localStorage.setItem(key, JSON.stringify(records)); } catch(e) {}
 }
 
 updateProgress();
 </script>
-
 </body>
 </html>

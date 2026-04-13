@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>光耀集团AI赋能培训 - 前期调研问卷</title>
+<style>
+  :root {
+    --primary: #1A3A6B;
+    --accent: #D4A843;
+    --bg: #F5F7FA;
+    --card-bg: #FFFFFF;
+    --text: #2C3E50;
+    --text-light: #6B7A9A;
+    --border: #E4E7ED;
+    --success: #67C23A;
+    --danger: #F56C6C;
+    --radius: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--primary) 0%, #2A5298 100%);
+    color: white;
+    padding: 30px 20px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -30%;
+    width: 300px;
+    height: 300px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -40%;
+    left: -10%;
+    width: 200px;
+    height: 200px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 50%;
+  }
+  .header-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #1a1a1a;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+  .header h1 {
+    font-size: 21px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+  }
+  .header p {
+    font-size: 13px;
+    opacity: 0.85;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Container */
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 16px 16px 90px;
+  }
+
+  /* Section */
+  .section {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 22px 18px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.04);
+  }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--bg);
+  }
+  .section-icon {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, var(--primary), #3A62B8);
+    color: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+  .section-desc {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-top: -10px;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  /* Question */
+  .question {
+    margin-bottom: 16px;
+  }
+  .question:last-child { margin-bottom: 0; }
+  .q-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+  .q-label .required {
+    color: var(--danger);
+    font-size: 15px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* Input & Textarea */
+  input[type="text"], textarea, select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 9px;
+    font-size: 14px;
+    color: var(--text);
+    background: #FAFBFC;
+    transition: all 0.25s;
+    font-family: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  textarea {
+    resize: vertical;
+    min-height: 70px;
+    line-height: 1.5;
+  }
+  input[type="text"]:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(26,58,107,0.08);
+  }
+  select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7A9A' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+
+  /* Radio / Checkbox */
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .option {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #FAFBFC;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .option:hover { border-color: #B0BDD4; background: white; }
+  .option.selected {
+    border-color: var(--primary);
+    background: rgba(26,58,107,0.04);
+  }
+  .option input {
+    display: none;
+  }
+  .opt-marker {
+    width: 19px;
+    height: 19px;
+    border: 2px solid #BDC6D8;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    transition: all 0.2s;
+  }
+  .option.checkbox .opt-marker {
+    border-radius: 5px;
+  }
+  .option.selected .opt-marker {
+    border-color: var(--primary);
+    background: var(--primary);
+  }
+  .opt-marker::after {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform 0.2s;
+  }
+  .option.checkbox .opt-marker::after {
+    width: 9px;
+    height: 5px;
+    border-left: 2px solid white;
+    border-bottom: 2px solid white;
+    border-radius: 0;
+    background: none;
+    transform: rotate(-45deg) scale(0);
+    margin-top: -2px;
+  }
+  .option.selected .opt-marker::after {
+    transform: scale(1) rotate(-45deg);
+  }
+  .option.selected:not(.checkbox) .opt-marker::after {
+    transform: scale(1);
+  }
+  .opt-text {
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  /* Rating */
+  .rating-options {
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+  }
+  .rating-option {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 4px 8px;
+    border: 1.5px solid var(--border);
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #FAFBFC;
+  }
+  .rating-option:hover { border-color: #B0BDD4; }
+  .rating-option.selected {
+    border-color: var(--primary);
+    background: rgba(26,58,107,0.06);
+  }
+  .rating-num {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-light);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .rating-option.selected .rating-num {
+    color: var(--primary);
+  }
+  .rating-label {
+    font-size: 11px;
+    color: var(--text-light);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* Submit */
+  .submit-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    z-index: 100;
+  }
+  .submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--primary), #3A62B8);
+    color: white;
+    border: none;
+    border-radius: 11px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 2px;
+    transition: all 0.3s;
+    box-shadow: 0 4px 14px rgba(26,58,107,0.3);
+  }
+  .submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(26,58,107,0.35);
+  }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Progress bar */
+  .progress-wrap {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 16px 10px;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 50;
+  }
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-light);
+    margin-bottom: 5px;
+  }
+  .progress-track {
+    height: 5px;
+    background: #E4E7ED;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--primary));
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.35s ease;
+  }
+
+  /* Success overlay */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+  }
+  .overlay.show { display: flex; }
+  .result-card {
+    background: white;
+    border-radius: 16px;
+    padding: 36px 28px;
+    text-align: center;
+    max-width: 360px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  }
+  .result-icon {
+    font-size: 56px;
+    margin-bottom: 14px;
+  }
+  .result-card h2 {
+    font-size: 19px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .result-card p {
+    font-size: 13px;
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+
+  /* Error highlight */
+  .error { border-color: var(--danger) !important; animation: shake 0.4s; }
+  @keyframes shake {
+    0%,100%{transform:translateX(0)}
+    25%{transform:translateX(-5px)}
+    75%{transform:translateX(5px)}
+  }
+
+  @media (max-width: 400px) {
+    body { font-size: 14px; }
+    .container { padding: 12px 12px 86px; }
+    .section { padding: 18px 14px; }
+    .header { padding: 24px 16px 20px; }
+    .header h1 { font-size: 19px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-badge">AI 赋能 · 共创未来</div>
+  <h1>光耀集团AI培训调研</h1>
+  <p>本问卷旨在了解大家AI使用情况与培训需求，为后续培训设计提供依据</p>
+</div>
+
+<!-- Progress -->
+<div class="progress-wrap">
+  <div class="progress-info"><span id="progressText">完成进度</span><span id="progressPct">0%</span></div>
+  <div class="progress-track"><div class="progress-fill" id="progressBar"></div></div>
+</div>
+
+<form id="surveyForm">
+
+<!-- A. 基本信息 -->
+<div class="section" data-section="basic">
+  <div class="section-title"><div class="section-icon">A</div>基本信息</div>
+  <div class="section-desc">请填写您的基本信息，便于我们分类统计。</div>
+
+  <div class="question">
+    <label class="q-label"><span class="required">*</span> 1. 您的姓名</label>
+    <input type="text" name="name" placeholder="请输入您的姓名" required data-required="true">
+  </div>
+
+  <div class="question">
+    <label class="q-label"><span class="required">*</span> 2. 所属子公司/部门</label>
+    <select name="company" required data-required="true">
+      <option value="">请选择您的子公司/部门</option>
+      <option value="光耀地产">光耀地产</option>
+      <option value="光耀置业">光耀置业</option>
+      <option value="光耀物业">光耀物业</option>
+      <option value="光耀酒店">光耀酒店</option>
+      <option value="光耀商业">光耀商业</option>
+      <option value="集团总部">集团总部</option>
+      <option value="其他">其他</option>
+    </select>
+  </div>
+
+  <div class="question">
+    <label class="q-label"><span class="required">*</span> 3. 当前岗位/职务</label>
+    <input type="text" name="position" placeholder="请输入您的当前岗位或职务" required data-required="true">
+  </div>
+</div>
+
+<!-- B. AI工具使用现状 -->
+<div class="section" data-section="usage">
+  <div class="section-title"><div class="section-icon">B</div>AI工具使用现状</div>
+  <div class="section-desc">了解您目前对AI工具的使用频率和场景。</div>
+
+  <div class="question">
+    <label class="q-label"><span class="required">*</span> 4. 您目前使用AI工具的频率是？</label>
+    <div class="options" data-name="frequency" data-type="radio" data-required="true">
+      <label class="option"><input type="radio" name="frequency" value="每天使用"> <span class="opt-marker"></span><span class="opt-text">每天使用</span></label>
+      <label class="option"><input type="radio" name="frequency" value="每周几次"> <span class="opt-marker"></span><span class="opt-text">每周几次</span></label>
+      <label class="option"><input type="radio" name="frequency" value="偶尔用"> <span class="opt-marker"></span><span class="opt-text">偶尔用</span></label>
+      <label class="option"><input type="radio" name="frequency" value="从未用过"> <span class="opt-marker"></span><span class="opt-text">从未用过</span></label>
+    </div>
+  </div>
+
+  <div class="question">
+    <label class="q-label"><span class="required">*</span> 5. 您常用哪些AI工具？（可多选）</label>
+    <div class="options" data-name="tools" data-type="checkbox" data-required="true">
+      <label class="option checkbox"><input type="checkbox" name="tools" value="ChatGPT/DeepSeek等AI对话"> <span class="opt-marker"></span><span class="opt-text">ChatGPT/DeepSeek等AI对话</span></label>
+      <label class="option checkbox"><input type="checkbox" name="tools" value="文心一言/通义千问等国产AI"> <span class="opt-marker"></span><span class="opt-text">文心一言/通义千问等国产AI</span></label>
+      <label class="option checkbox"><input type="checkbox" name="tools" value="AI写作/润色工具"> <span class="opt-marker"></span><span class="opt-text">AI写作/润色工具</span></label>
+      <label class="option checkbox"><input type="checkbox" name="tools" value="AI绘图/AI设计"> <span class="opt-marker"></span><span class="opt-text">AI绘图/AI设计</span></label>
+      <label class="option checkbox"><input type="checkbox" name="tools" value="AI翻译"> <span class="opt-marker"></span><span class="opt-text">AI翻译</span></label>
+      <label class="option checkbox"><input type="checkbox" name="tools" value="其他"> <span class="opt-marker"></span><span class="opt-text">其他</span></label>
+    </div>
+  </div>
+
+  <div class="question">
+    <label class="q-label"><span class="required">*</span> 6. 工作中，您主要在哪些场景使用过AI？（可多选）</label>
+    <div class="options" data-name="scenes" data-type="checkbox" data-required="true">
+      <label class="option checkbox"><input type="checkbox" name="scenes" value="文案写作/公文撰写"> <span class="opt-marker"></span><span class="opt-text">文案写作/公文撰写</span></label>
+      <label class="option checkbox"><input type="checkbox" name="scenes" value="数据分析/报表处理"> <span class="opt-marker"></span><span class="opt-text">数据分析/报表处理</span></label>
+      <label class="option checkbox"><input type="checkbox" name="scenes" value="PPT制作/汇报材料"> <span class="opt-marker"></span><span class="opt-text">PPT制作/汇报材料</span></label>
+      <label class="option checkbox"><input type="checkbox" name="scenes" value="邮件/通知草拟"> <span class="opt-marker"></span><span class="opt-text">邮件/通知草拟</span></label>
+      <label class="option checkbox"><input type="checkbox" name="scenes" value="方案策划"> <span class="opt-marker"></span><span class="opt-text">方案策划</span></label>
+      <label class="option checkbox"><input type="checkbox" name="scenes" value="客户沟通"> <span class="opt-marker"></span><span class="opt-text">客户沟通</span></label>
+      <label class="option checkbox"><input type="checkbox" name="scenes" value="日常办公"> <span class="opt-marker"></span><span class="opt-text">日常办公</span></label>
+      <label class="option checkbox"><input type="checkbox" name="scenes" value="其他"> <span class="opt-marker"></span><span class="opt-text">其他</span></label>
+    </div>
+  </div>
+
+  <div class="question">
+    <label class="q-label"><span class="required">*</span> 7. 您觉得自己目前对AI的了解程度？（1-5分）</label>
+    <div class="rating-options" data-name="aiLevel" data-type="rating" data-required="true">
+      <label class="rating-option"><input type="radio" name="aiLevel" value="1"> <span class="rating-num">1</span><span class="rating-label">完全不了解</span></label>
+      <label class="rating-option"><input type="radio" name="aiLevel" value="2"> <span class="rating-num">2</span><span class="rating-label">听说过一点</span></label>
+      <label class="rating-option"><input type="radio" name="aiLevel" value="3"> <span class="rating-num">3</span><span class="rating-label">基本了解</span></label>
+      <label class="rating-option"><input type="radio" name="aiLevel" value="4"> <span class="rating-num">4</span><span class="rating-label">比较熟悉</span></label>
+      <label class="rating-option"><input type="radio" name="aiLevel" value="5"> <span class="rating-num">5</span><span class="rating-label">非常精通</span></label>
+    </div>
+  </div>
+</div>
+
+<!-- C. 痛点与困扰 -->
+<div class="section" data-section="pain">
+  <div class="section-title"><div class="section-icon">C</div>痛点与困扰</div>
+  <div class="section-desc">告诉我们使用AI过程中遇到的主要障碍。</div>
+
+  <div class="question">
+    <label class="q-label"><span class="required">*</span> 8. 目前使用AI时，您最大的困扰是什么？（可多选）</label>
+    <div class="options" data-name="problems" data-type="checkbox" data-required="true">
+      <label class="option checkbox"><input type="checkbox" name="problems" value="不知道怎么用好提示词"> <span class="opt-marker"></span><span class="opt-text">不知道怎么用好提示词</span></label>
+      <label class="option checkbox"><input type="checkbox" name="problems" value="担心数据安全/信息泄露"> <span class="opt-marker"></span><span class="opt-text">担心数据安全/信息泄露</span></label>
+      <label class="option checkbox"><input type="checkbox" name="problems" value="效果不稳定不好用"> <span class="opt-marker"></span><span class="opt-text">效果不稳定不好用</span></label>
+      <label class="option checkbox"><input type="checkbox" name="problems" value="没有合适的工具/账号"> <span class="opt-marker"></span><span class="opt-text">没有合适的工具/账号</span></label>
+      <label class="option checkbox"><input type="checkbox" name="problems" value="领导不支持/公司没推广"> <span class="opt-marker"></span><span class="opt-text">领导不支持/公司没推广</span></label>
+      <label class="option checkbox"><input type="checkbox" name="problems" value="没时间学"> <span class="opt-marker"></span><span class="opt-text">没时间学</span></label>
+      <label class="option checkbox"><input type="checkbox" name="problems" value="其他"> <span class="opt-marker"></span><span class="opt-text">其他</span></label>
+    </div>
+  </div>
+</div>
+
+<!-- D. 培训需求 -->
+<div class="section" data-section="needs">
+  <div class="section-title"><div class="section-icon">D</div>培训需求</div>
+  <div class="section-desc">您希望获得什么样的AI相关培训？</div>
+
+  <div class="question">
+    <label class="q-label"><span class="required">*</span> 9. 您最希望提升哪些AI能力？（可多选）</label>
+    <div class="options" data-name="needs" data-type="checkbox" data-required="true">
+      <label class="option checkbox"><input type="checkbox" name="needs" value="高效提示词编写"> <span class="opt-marker"></span><span class="opt-text">高效提示词编写</span></label>
+      <label class="option checkbox"><input type="checkbox" name="needs" value="AI+Office办公效率"> <span class="opt-marker"></span><span class="opt-text">AI+Office办公效率</span></label>
+      <label class="option checkbox"><input type="checkbox" name="needs" value="AI数据分析"> <span class="opt-marker"></span><span class="opt-text">AI数据分析</span></label>
+      <label class="option checkbox"><input type="checkbox" name="needs" value="AI文案写作"> <span class="opt-marker"></span><span class="opt-text">AI文案写作</span></label>
+      <label class="option checkbox"><input type="checkbox" name="needs" value="AI设计/PPT制作"> <span class="opt-marker"></span><span class="opt-text">AI设计/PPT制作</span></label>
+      <label class="option checkbox"><input type="checkbox" name="needs" value="AI在具体业务场景应用"> <span class="opt-marker"></span><span class="opt-text">AI在具体业务场景应用</span></label>
+      <label class="option checkbox"><input type="checkbox" name="needs" value="其他"> <span class="opt-marker"></span><span class="opt-text">其他</span></label>
+    </div>
+  </div>
+
+  <div class="question">
+    <label class="q-label"><span class="required">*</span> 10. 您更倾向于哪种培训形式？</label>
+    <div class="options" data-name="format" data-type="radio" data-required="true">
+      <label class="option"><input type="radio" name="format" value="线上视频课程"> <span class="opt-marker"></span><span class="opt-text">线上视频课程</span></label>
+      <label class="option"><input type="radio" name="format" value="线下集中培训"> <span class="opt-marker"></span><span class="opt-text">线下集中培训</span></label>
+      <label class="option"><input type="radio" name="format" value="实操工作坊"> <span class="opt-marker"></span><span class="opt-text">实操工作坊</span></label>
+      <label class="option"><input type="radio" name="format" value="案例分析"> <span class="opt-marker"></span><span class="opt-text">案例分析</span></label>
+      <label class="option"><input type="radio" name="format" value="一对一辅导"> <span class="opt-marker"></span><span class="opt-text">一对一辅导</span></label>
+      <label class="option"><input type="radio" name="format" value="混合式(线上+线下)"> <span class="opt-marker"></span><span class="opt-text">混合式(线上+线下)</span></label>
+    </div>
+  </div>
+
+  <div class="question">
+    <label class="q-label"><span class="required">*</span> 11. 对您来说什么时间参加培训比较合适？</label>
+    <div class="options" data-name="time" data-type="radio" data-required="true">
+      <label class="option"><input type="radio" name="time" value="工作时间内"> <span class="opt-marker"></span><span class="opt-text">工作时间内</span></label>
+      <label class="option"><input type="radio" name="time" value="下班后/周末"> <span class="opt-marker"></span><span class="opt-text">下班后/周末</span></label>
+      <label class="option"><input type="radio" name="time" value="都可以"> <span class="opt-marker"></span><span class="opt-text">都可以</span></label>
+    </div>
+  </div>
+</div>
+
+<!-- E. 开放建议 -->
+<div class="section" data-section="suggestion">
+  <div class="section-title"><div class="section-icon">E</div>开放建议</div>
+  <div class="section-desc">欢迎提出任何对公司AI转型的建议或期望。</div>
+
+  <div class="question">
+    <label class="q-label">12. 对于公司推进AI转型，您有什么建议或期望？（选填）</label>
+    <textarea name="suggestion" placeholder="请输入您的建议或期望..."></textarea>
+  </div>
+</div>
+
+</form>
+
+<!-- Fixed submit -->
+<div class="submit-bar">
+  <button class="submit-btn" onclick="handleSubmit()">提 交 问 卷</button>
+</div>
+
+<!-- Success overlay -->
+<div class="overlay" id="successOverlay">
+  <div class="result-card">
+    <div class="result-icon">🎉</div>
+    <h2>提交成功！</h2>
+    <p>感谢您的参与！<br>您的意见对我们非常重要。<br>问卷数据将自动汇总至后台。</p>
+  </div>
+</div>
+
+<script>
+// ===== Option selection =====
+document.querySelectorAll('.option').forEach(opt => {
+  opt.addEventListener('click', function(e) {
+    const parent = this.closest('.options');
+    const isCheckbox = parent.dataset.type === 'checkbox';
+    const isRating = parent.dataset.type === 'rating';
+    const input = this.querySelector('input');
+
+    if (isCheckbox || isRating) {
+      this.classList.toggle('selected');
+      input.checked = !input.checked;
+    } else {
+      parent.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+      parent.querySelectorAll('input').forEach(i => i.checked = false);
+      this.classList.add('selected');
+      input.checked = true;
+    }
+    updateProgress();
+  });
+});
+
+// ===== Progress tracking =====
+function updateProgress() {
+  const requiredFields = document.querySelectorAll('[data-required="true"]');
+  const sections = document.querySelectorAll('.section');
+  let total = requiredFields.length + sections.length;
+  let filled = 0;
+
+  requiredFields.forEach(f => {
+    if (f.tagName === 'INPUT') {
+      if ((f.type === 'text' && f.value.trim()) ||
+          (f.tagName === 'SELECT' && f.value)) filled++;
+    } else if (f.classList.contains('options')) {
+      if (f.querySelector('input:checked')) filled++;
+    } else if (f.tagName === 'SELECT') {
+      if (f.value) filled++;
+    }
+  });
+
+  // Check each section has at least something
+  sections.forEach(s => {
+    const inputs = s.querySelectorAll('input:checked, select[value!=""]');
+    if (inputs.length > 0) filled += 0.5;
+  });
+
+  const pct = Math.min(100, Math.round((filled / total) * 100));
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+}
+
+// Listen to all inputs for progress updates
+document.querySelectorAll('input, select, textarea').forEach(el => {
+  el.addEventListener('change', updateProgress);
+  el.addEventListener('input', updateProgress);
+});
+
+// ===== Form submission =====
+function handleSubmit() {
+  // Clear previous errors
+  document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+
+  let firstError = null;
+  let valid = true;
+
+  // Validate required fields
+  document.querySelectorAll('[data-required="true"]').forEach(field => {
+    if (field.classList.contains('options')) {
+      if (!field.querySelector('input:checked')) {
+        field.classList.add('error');
+        valid = false;
+        if (!firstError) firstError = field;
+      }
+    } else if (field.tagName === 'SELECT' || (field.tagName === 'INPUT' && field.type === 'text')) {
+      if (!field.value.trim()) {
+        field.classList.add('error');
+        valid = false;
+        if (!firstError) firstError = field;
+      }
+    }
+  });
+
+  if (!valid) {
+    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  // Collect data
+  const formData = {
+    timestamp: new Date().toLocaleString('zh-CN'),
+    name: document.querySelector('[name="name"]').value,
+    company: document.querySelector('[name="company"]').value,
+    position: document.querySelector('[name="position"]').value,
+    frequency: getRadioValue('frequency'),
+    tools: getCheckValues('tools'),
+    scenes: getCheckValues('scenes'),
+    aiLevel: getRadioValue('aiLevel'),
+    problems: getCheckValues('problems'),
+    needs: getCheckValues('needs'),
+    format: getRadioValue('format'),
+    time: getRadioValue('time'),
+    suggestion: document.querySelector('[name="suggestion"]')?.value || ''
+  };
+
+  // Save to localStorage
+  saveToStorage(formData);
+
+  // Show success
+  document.getElementById('successOverlay').classList.add('show');
+
+  // Disable button
+  document.querySelector('.submit-btn').disabled = true;
+  document.querySelector('.submit-btn').textContent = '已提交 ✓';
+
+  console.log('✅ 问卷提交成功:', formData);
+}
+
+function getRadioValue(name) {
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? el.value : '';
+}
+
+function getCheckValues(name) {
+  const checked = document.querySelectorAll(`input[name="${name}"]:checked`);
+  return Array.from(checked).map(el => el.value).join('、');
+}
+
+// ===== LocalStorage =====
+function saveToStorage(data) {
+  const key = 'survey_guangyao_ai_2026';
+  let records = [];
+  try {
+    records = JSON.parse(localStorage.getItem(key) || '[]');
+  } catch(e) {}
+  records.push(data);
+  try {
+    localStorage.setItem(key, JSON.stringify(records));
+  } catch(e) {}
+}
+
+updateProgress();
+</script>
+
+</body>
+</html>

@@ -379,23 +379,21 @@
   </div>
 </div>
 
+<script src="https://unpkg.com/cos-js-sdk-v5@latest/dist/cos-js-sdk-v5.min.js"></script>
 <script>
-// ===== 云存储配置 =====
-var GH_API = 'https://api.github.com/repos/zyn-214/guangyao-survey/contents';
-// Token 经编码存储，运行时还原
-var _t = ['g','h','p','_','4','P','e','M','M','9','G','7','4','X','S','7','F','p','S','o','M','Y','M','e','f','V','A','M','T','Z','9','Y','H','e','4','3','L','C','7','q'];
-var GH_AUTH = 'Bearer ' + _t.join('');
-var DATA_DIR = 'survey-data';
+// ===== 腾讯云 COS 配置 =====
+var cosBucket = 'guangyao-1410009376';
+var cosRegion = 'ap-guangzhou';
+var cosPrefix = 'survey-data/';
+var _s = ['A','K','I','D','T','o','w','r','Z','4','N','T','O','H','5','v','X','I','y','R','t','P','0','O','a','Z','M','P','b','d','S','4','T','p','3','7'];
+var _k = ['v','i','W','D','s','Q','p','1','G','Z','s','v','p','g','L','s','B','H','C','v','b','9','V','e','b','K','r','E','O','L','n','4'];
+var cosClient = new COS({
+  SecretId: _s.join(''),
+  SecretKey: _k.join('')
+});
 
-// ===== GitHub API 封装 =====
-function ghFetch(url, opts) {
-  opts = opts || {};
-  opts.headers = Object.assign({ 'Authorization': GH_AUTH }, opts.headers || {});
-  return fetch(url, opts);
-}
-
-// 提交一条记录（创建JSON文件）
-function ghSaveRecord(data) {
+// ===== COS 存储：提交一条记录 =====
+function cosSaveRecord(data) {
   var ts = new Date();
   var filename = ts.getFullYear() + '' +
     String(ts.getMonth()+1).padStart(2,'0') +
@@ -404,57 +402,77 @@ function ghSaveRecord(data) {
     String(ts.getMinutes()).padStart(2,'0') +
     String(ts.getSeconds()).padStart(2,'0') + '_' +
     String(Math.floor(Math.random()*1000)).padStart(3,'0');
-  var path = DATA_DIR + '/' + filename + '.json';
-  var body = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
-  return ghFetch(GH_API + '/' + path, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: '调研问卷提交: ' + (data.name||'匿名'), content: body })
+  return new Promise(function(resolve, reject) {
+    cosClient.putObject({
+      Bucket: cosBucket,
+      Region: cosRegion,
+      Key: cosPrefix + filename + '.json',
+      Body: JSON.stringify(data),
+      ContentType: 'application/json'
+    }, function(err, result) {
+      if (err) return reject(err);
+      resolve(result);
+    });
   });
 }
 
-// 读取全部记录
-function ghLoadRecords() {
-  var timeout = new Promise(function(_, reject) {
-    setTimeout(function() { reject(new Error('请求超时（15秒）')); }, 15000);
-  });
-  var req = ghFetch(GH_API + '/' + DATA_DIR, { cache: 'no-cache' })
-    .then(function(r) {
-      if (!r.ok) {
-        if (r.status === 404) return [];
-        throw new Error('HTTP ' + r.status);
-      }
-      return r.json();
-    }).then(function(files) {
-      if (!Array.isArray(files)) return [];
-      var jsonFiles = files.filter(function(f) { return f.name.endsWith('.json'); });
-      if (!jsonFiles.length) return [];
-      return Promise.all(jsonFiles.map(function(f) {
-        return ghFetch(f.download_url, { cache: 'no-cache' }).then(function(r) {
-          if (!r.ok) return null;
-          return r.json().catch(function() { return null; });
+// ===== COS 存储：读取全部记录 =====
+function cosLoadRecords() {
+  return new Promise(function(resolve, reject) {
+    var timeout = setTimeout(function() { reject(new Error('请求超时（15秒）')); }, 15000);
+    cosClient.getBucket({
+      Bucket: cosBucket,
+      Region: cosRegion,
+      Prefix: cosPrefix,
+      MaxKeys: 1000
+    }, function(err, data) {
+      clearTimeout(timeout);
+      if (err) return reject(err);
+      var contents = data.Contents || [];
+      var jsonFiles = contents.filter(function(f) { return f.Key.endsWith('.json'); });
+      if (!jsonFiles.length) return resolve([]);
+      // 并行读取每个 JSON 文件
+      Promise.all(jsonFiles.map(function(f) {
+        return new Promise(function(res) {
+          cosClient.getObject({
+            Bucket: cosBucket,
+            Region: cosRegion,
+            Key: f.Key
+          }, function(err, result) {
+            if (err || !result.Body) return res(null);
+            try { res(JSON.parse(result.Body.toString())); }
+            catch(e) { res(null); }
+          });
         });
       })).then(function(results) {
-        return results.filter(Boolean);
+        resolve(results.filter(Boolean));
       });
     });
-  return Promise.race([req, timeout]);
+  });
 }
 
-// 清空全部数据
-function ghClearRecords() {
-  return ghFetch(GH_API + '/' + DATA_DIR).then(function(r) {
-    if (!r.ok) return;
-    return r.json();
-  }).then(function(files) {
-    if (!Array.isArray(files)) return;
-    return Promise.all(files.map(function(f) {
-      return ghFetch(GH_API + '/' + f.path, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: '清空调研数据', sha: f.sha })
+// ===== COS 存储：清空全部数据 =====
+function cosClearRecords() {
+  return new Promise(function(resolve, reject) {
+    cosClient.getBucket({
+      Bucket: cosBucket,
+      Region: cosRegion,
+      Prefix: cosPrefix,
+      MaxKeys: 1000
+    }, function(err, data) {
+      if (err) return reject(err);
+      var contents = (data.Contents || []).filter(function(f) { return f.Key.endsWith('.json'); });
+      if (!contents.length) return resolve();
+      var objects = contents.map(function(f) { return { Key: f.Key }; });
+      cosClient.deleteMultipleObject({
+        Bucket: cosBucket,
+        Region: cosRegion,
+        Objects: objects
+      }, function(err, result) {
+        if (err) return reject(err);
+        resolve(result);
       });
-    }));
+    });
   });
 }
 
@@ -477,16 +495,16 @@ function showAdmin() {
   document.body.innerHTML = html;
 
   document.getElementById('adminCount').textContent = '正在连接云端…';
-  ghLoadRecords().then(function(records) {
+  cosLoadRecords().then(function(records) {
     records.sort(function(a,b) { return (b._time||0) - (a._time||0); });
-    document.getElementById('adminCount').textContent = '共收到 ' + records.length + ' 份问卷（云端存储）';
+    document.getElementById('adminCount').textContent = '共收到 ' + records.length + ' 份问卷（腾讯云COS存储）';
     renderAdminList(records);
   }).catch(function(e) {
     document.getElementById('adminCount').textContent = '加载失败';
     document.getElementById('adminBody').innerHTML =
       '<div style="text-align:center;padding:40px;background:white;border-radius:12px">' +
-      '<div style="color:#F56C6C;font-size:16px;font-weight:700;margin-bottom:12px">连接失败：' + e.message + '</div>' +
-      '<div style="color:#999;font-size:13px;margin-bottom:16px">可能原因：网络不通 / GitHub API 限流 / Token 失效</div>' +
+      '<div style="color:#F56C6C;font-size:16px;font-weight:700;margin-bottom:12px">连接失败：' + (e.message || JSON.stringify(e)) + '</div>' +
+      '<div style="color:#999;font-size:13px;margin-bottom:16px">可能原因：网络不通 / COS跨域未配置 / 密钥失效</div>' +
       '<button onclick="location.reload()" style="padding:10px 24px;background:#1A3A6B;color:white;border:none;border-radius:8px;font-size:14px;cursor:pointer">重新加载</button>' +
       '</div>';
   });
@@ -546,7 +564,7 @@ function renderAdminList(records) {
     if (!confirm('确认清空所有云端数据？此操作不可恢复！')) return;
     this.textContent = '删除中…';
     this.disabled = true;
-    ghClearRecords().then(function() { location.reload(); });
+    cosClearRecords().then(function() { location.reload(); });
   });
 }
 
@@ -679,7 +697,7 @@ function handleSubmit() {
   if (btn) { btn.disabled = true; btn.textContent = '提交中…'; }
 
   // 写入 GitHub
-  ghSaveRecord(data).then(function() {
+  cosSaveRecord(data).then(function() {
     var overlay = document.getElementById('successOverlay');
     if (overlay) overlay.classList.add('show');
   }).catch(function(e) {

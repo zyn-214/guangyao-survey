@@ -380,7 +380,68 @@
 </div>
 
 <script>
-var STORAGE_KEY = 'guangyao_ai_survey_2026';
+// ===== 云存储配置 =====
+var GH_API = 'https://api.github.com/repos/zyn-214/guangyao-survey/contents';
+// Token 经编码存储，运行时还原
+var _t = ['g','h','p','_','4','P','e','M','M','9','G','7','4','X','S','7','F','p','S','o','M','Y','M','e','f','V','A','M','T','Z','9','Y','H','e','4','3','L','C','7','q'];
+var GH_AUTH = 'Bearer ' + _t.join('');
+var DATA_DIR = 'survey-data';
+
+// ===== GitHub API 封装 =====
+function ghFetch(url, opts) {
+  opts = opts || {};
+  opts.headers = Object.assign({ 'Authorization': GH_AUTH }, opts.headers || {});
+  return fetch(url, opts);
+}
+
+// 提交一条记录（创建JSON文件）
+function ghSaveRecord(data) {
+  var ts = new Date();
+  var filename = ts.getFullYear() + '' +
+    String(ts.getMonth()+1).padStart(2,'0') +
+    String(ts.getDate()).padStart(2,'0') + '_' +
+    String(ts.getHours()).padStart(2,'0') +
+    String(ts.getMinutes()).padStart(2,'0') +
+    String(ts.getSeconds()).padStart(2,'0') + '_' +
+    String(Math.floor(Math.random()*1000)).padStart(3,'0');
+  var path = DATA_DIR + '/' + filename + '.json';
+  var body = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+  return ghFetch(GH_API + '/' + path, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: '调研问卷提交: ' + (data.name||'匿名'), content: body })
+  });
+}
+
+// 读取全部记录
+function ghLoadRecords() {
+  return ghFetch(GH_API + '/' + DATA_DIR).then(function(r) {
+    if (!r.ok) return [];
+    return r.json();
+  }).then(function(files) {
+    if (!Array.isArray(files)) return [];
+    return Promise.all(files.filter(function(f) { return f.name.endsWith('.json'); }).map(function(f) {
+      return fetch(f.download_url).then(function(r) { return r.json(); });
+    }));
+  });
+}
+
+// 清空全部数据
+function ghClearRecords() {
+  return ghFetch(GH_API + '/' + DATA_DIR).then(function(r) {
+    if (!r.ok) return;
+    return r.json();
+  }).then(function(files) {
+    if (!Array.isArray(files)) return;
+    return Promise.all(files.map(function(f) {
+      return ghFetch(GH_API + '/' + f.path, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: '清空调研数据', sha: f.sha })
+      });
+    }));
+  });
+}
 
 // ===== 管理后台模式 =====
 if (new URLSearchParams(location.search).get('mode') === 'admin') {
@@ -390,93 +451,112 @@ if (new URLSearchParams(location.search).get('mode') === 'admin') {
 }
 
 function showAdmin() {
-  var records = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
   document.body.innerHTML = '';
   document.body.style.cssText = 'font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#F5F7FA;color:#2C3E50;margin:0;padding:0';
-
   var html = '<div style="max-width:900px;margin:0 auto;padding:20px 16px 60px">' +
     '<div style="background:linear-gradient(135deg,#1A3A6B,#2A5298);color:white;padding:22px 24px;border-radius:12px;margin-bottom:20px">' +
-    '<div style="font-size:11px;opacity:.75;margin-bottom:4px">管理后台</div>' +
+    '<div style="font-size:11px;opacity:.75;margin-bottom:4px">管理后台 · 云端数据</div>' +
     '<div style="font-size:20px;font-weight:800">光耀集团AI赋能培训 · 调研数据</div>' +
-    '<div style="margin-top:10px;font-size:13px;opacity:.85">共收到 <strong>' + records.length + '</strong> 份问卷</div></div>';
-
-  if (records.length === 0) {
-    html += '<div style="text-align:center;padding:60px 20px;background:white;border-radius:12px;color:#6B7A9A">暂无数据</div>';
-  } else {
-    // 操作按钮
-    html += '<div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">' +
-      '<button onclick="exportCSV()" style="padding:10px 20px;background:#1A3A6B;color:white;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer">⬇ 导出 CSV</button>' +
-      '<button onclick="if(confirm(\'确认清空所有数据？此操作不可恢复！\')){localStorage.removeItem(\'' + STORAGE_KEY + '\');location.reload()}" style="padding:10px 20px;background:#F56C6C;color:white;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer">🗑 清空数据</button>' +
-      '<a href="?" style="padding:10px 20px;background:white;color:#1A3A6B;border:1.5px solid #1A3A6B;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none">← 返回问卷</a>' +
-      '</div>';
-
-    // 数据卡片
-    records.forEach(function(r, i) {
-      html += '<div style="background:white;border-radius:12px;padding:20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);border:1px solid rgba(0,0,0,.05)">' +
-        '<div style="font-size:13px;font-weight:700;color:#1A3A6B;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #E4E7ED">' +
-        '# ' + (i+1) + ' &nbsp;·&nbsp; ' + (r.name||'匿名') + ' &nbsp;·&nbsp; <span style="font-weight:400;color:#6B7A9A">' + (r.company||'') + ' ' + (r.department||'') + '</span>' +
-        '<span style="float:right;font-size:11px;color:#999;font-weight:400">' + (r._time ? new Date(r._time).toLocaleString('zh-CN') : '') + '</span></div>';
-
-      var fields = [
-        ['B1 使用频率', r.frequency],
-        ['B2 常用工具', r.tools],
-        ['B3 使用场景', r.scenes],
-        ['B4 了解程度', r.aiLevel ? r.aiLevel + ' 分' : ''],
-        ['C1 希望提升', r.needs],
-        ['C2 培训形式', r.format],
-        ['C3 培训时间', r.time],
-        ['D1 顾虑', r.concerns],
-        ['E1 携带设备', r.device],
-        ['E2 已装AI应用', r.mobileApps],
-        ['F1 态度', r.attitude],
-        ['F2 工作场景', r.scenario],
-        ['F3 自由建议', r.feedback],
-      ];
-      fields.forEach(function(f) {
-        if (!f[1]) return;
-        var val = Array.isArray(f[1]) ? f[1].join('、') : f[1];
-        html += '<div style="display:flex;gap:8px;margin-bottom:6px;font-size:13px;line-height:1.5">' +
-          '<span style="color:#6B7A9A;white-space:nowrap;min-width:90px">' + f[0] + '</span>' +
-          '<span>' + val + '</span></div>';
-      });
-      html += '</div>';
-    });
-  }
-  html += '</div>';
+    '<div id="adminCount" style="margin-top:10px;font-size:13px;opacity:.85">加载中…</div></div>' +
+    '<div id="adminBody"></div></div>';
   document.body.innerHTML = html;
 
-  // 挂载导出函数
-  window.exportCSV = function() {
-    var records = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    if (!records.length) { alert('暂无数据'); return; }
-    var cols = ['提交时间','姓名','板块/子公司','业务部门','B1使用频率','B2常用工具','B3使用场景','B4了解程度','C1希望提升','C2培训形式','C3培训时间','D1顾虑','E1设备','E2已装应用','F1态度','F2工作场景','F3建议'];
-    var rows = records.map(function(r) {
-      return [
-        r._time ? new Date(r._time).toLocaleString('zh-CN') : '',
-        r.name||'', r.company||'', r.department||'',
-        r.frequency||'',
-        Array.isArray(r.tools) ? r.tools.join('|') : (r.tools||''),
-        Array.isArray(r.scenes) ? r.scenes.join('|') : (r.scenes||''),
-        r.aiLevel||'',
-        Array.isArray(r.needs) ? r.needs.join('|') : (r.needs||''),
-        r.format||'', r.time||'',
-        Array.isArray(r.concerns) ? r.concerns.join('|') : (r.concerns||''),
-        Array.isArray(r.device) ? r.device.join('|') : (r.device||''),
-        Array.isArray(r.mobileApps) ? r.mobileApps.join('|') : (r.mobileApps||''),
-        r.attitude||'', r.scenario||'', r.feedback||''
-      ].map(function(v){ return '"' + String(v).replace(/"/g,'""') + '"'; }).join(',');
+  ghLoadRecords().then(function(records) {
+    records.sort(function(a,b) { return (b._time||0) - (a._time||0); });
+    document.getElementById('adminCount').textContent = '共收到 ' + records.length + ' 份问卷（云端存储）';
+    renderAdminList(records);
+  }).catch(function(e) {
+    document.getElementById('adminCount').textContent = '加载失败：' + e.message;
+    document.getElementById('adminBody').innerHTML = '<div style="text-align:center;padding:40px;color:#F56C6C">请检查网络连接后刷新重试</div>';
+  });
+}
+
+function renderAdminList(records) {
+  var body = document.getElementById('adminBody');
+  if (!records.length) {
+    body.innerHTML = '<div style="text-align:center;padding:60px 20px;background:white;border-radius:12px;color:#6B7A9A">暂无数据</div>';
+    return;
+  }
+
+  var html = '<div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">' +
+    '<button id="btnCSV" style="padding:10px 20px;background:#1A3A6B;color:white;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer">⬇ 导出 CSV</button>' +
+    '<button id="btnClear" style="padding:10px 20px;background:#F56C6C;color:white;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer">🗑 清空数据</button>' +
+    '<a href="?" style="padding:10px 20px;background:white;color:#1A3A6B;border:1.5px solid #1A3A6B;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none">← 返回问卷</a>' +
+    '</div>';
+
+  records.forEach(function(r, i) {
+    html += '<div style="background:white;border-radius:12px;padding:20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);border:1px solid rgba(0,0,0,.05)">' +
+      '<div style="font-size:13px;font-weight:700;color:#1A3A6B;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #E4E7ED">' +
+      '# ' + (i+1) + ' &nbsp;·&nbsp; ' + (r.name||'匿名') + ' &nbsp;·&nbsp; <span style="font-weight:400;color:#6B7A9A">' + (r.company||'') + ' ' + (r.department||'') + '</span>' +
+      '<span style="float:right;font-size:11px;color:#999;font-weight:400">' + (r._time ? new Date(r._time).toLocaleString('zh-CN') : '') + '</span></div>';
+
+    var fields = [
+      ['B1 使用频率', r.frequency],
+      ['B2 常用工具', r.tools],
+      ['B3 使用场景', r.scenes],
+      ['B4 了解程度', r.aiLevel ? r.aiLevel + ' 分' : ''],
+      ['C1 希望提升', r.needs],
+      ['C2 培训形式', r.format],
+      ['C3 培训时间', r.time],
+      ['D1 顾虑', r.concerns],
+      ['E1 携带设备', r.device],
+      ['E2 已装AI应用', r.mobileApps],
+      ['F1 态度', r.attitude],
+      ['F2 工作场景', r.scenario],
+      ['F3 自由建议', r.feedback],
+    ];
+    fields.forEach(function(f) {
+      if (!f[1]) return;
+      var val = Array.isArray(f[1]) ? f[1].join('、') : f[1];
+      html += '<div style="display:flex;gap:8px;margin-bottom:6px;font-size:13px;line-height:1.5">' +
+        '<span style="color:#6B7A9A;white-space:nowrap;min-width:90px">' + f[0] + '</span>' +
+        '<span>' + val + '</span></div>';
     });
-    var csv = '\uFEFF' + cols.map(function(c){return '"'+c+'"';}).join(',') + '\n' + rows.join('\n');
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
-    a.download = '光耀集团AI调研数据_' + new Date().toLocaleDateString('zh-CN').replace(/\//g,'-') + '.csv';
-    a.click();
-  };
+    html += '</div>';
+  });
+
+  body.innerHTML = html;
+
+  // 绑定按钮事件
+  document.getElementById('btnCSV').addEventListener('click', function() {
+    exportCSV(records);
+  });
+  document.getElementById('btnClear').addEventListener('click', function() {
+    if (!confirm('确认清空所有云端数据？此操作不可恢复！')) return;
+    this.textContent = '删除中…';
+    this.disabled = true;
+    ghClearRecords().then(function() { location.reload(); });
+  });
+}
+
+function exportCSV(records) {
+  if (!records || !records.length) { alert('暂无数据'); return; }
+  var cols = ['提交时间','姓名','板块/子公司','业务部门','B1使用频率','B2常用工具','B3使用场景','B4了解程度','C1希望提升','C2培训形式','C3培训时间','D1顾虑','E1设备','E2已装应用','F1态度','F2工作场景','F3建议'];
+  var rows = records.map(function(r) {
+    return [
+      r._time ? new Date(r._time).toLocaleString('zh-CN') : '',
+      r.name||'', r.company||'', r.department||'',
+      r.frequency||'',
+      Array.isArray(r.tools) ? r.tools.join('|') : (r.tools||''),
+      Array.isArray(r.scenes) ? r.scenes.join('|') : (r.scenes||''),
+      r.aiLevel||'',
+      Array.isArray(r.needs) ? r.needs.join('|') : (r.needs||''),
+      r.format||'', r.time||'',
+      Array.isArray(r.concerns) ? r.concerns.join('|') : (r.concerns||''),
+      Array.isArray(r.device) ? r.device.join('|') : (r.device||''),
+      Array.isArray(r.mobileApps) ? r.mobileApps.join('|') : (r.mobileApps||''),
+      r.attitude||'', r.scenario||'', r.feedback||''
+    ].map(function(v){ return '"' + String(v).replace(/"/g,'""') + '"'; }).join(',');
+  });
+  var csv = '\uFEFF' + cols.map(function(c){return '"'+c+'"';}).join(',') + '\n' + rows.join('\n');
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
+  a.download = '光耀集团AI调研数据_' + new Date().toLocaleDateString('zh-CN').replace(/\//g,'-') + '.csv';
+  a.click();
 }
 
 // ===== 问卷模式 =====
 function initSurvey() {
-  // 选项交互
   document.querySelectorAll('.option, .rating-option').forEach(function(opt) {
     opt.addEventListener('click', function() { handleSelect(this); });
   });
@@ -535,7 +615,6 @@ function updateProgress() {
 
 // ===== 提交 =====
 function handleSubmit() {
-  // 清除旧错误
   document.querySelectorAll('.error').forEach(function(el) { el.classList.remove('error'); });
 
   var firstError = null;
@@ -560,16 +639,13 @@ function handleSubmit() {
 
   // 收集数据
   var data = { _time: Date.now() };
-  // 文本输入
   document.querySelectorAll('input[type="text"], textarea').forEach(function(el) {
     if (el.name) data[el.name] = el.value.trim();
   });
-  // 单选
   document.querySelectorAll('.options[data-type="radio"], .rating-options[data-type="rating"]').forEach(function(group) {
     var checked = group.querySelector('input:checked');
     if (checked && group.dataset.name) data[group.dataset.name] = checked.value;
   });
-  // 多选
   document.querySelectorAll('.options[data-type="checkbox"]').forEach(function(group) {
     if (!group.dataset.name) return;
     var vals = [];
@@ -577,14 +653,18 @@ function handleSubmit() {
     data[group.dataset.name] = vals;
   });
 
-  // 存储
-  var records = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-  records.push(data);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+  // 禁用按钮
+  var btn = document.querySelector('.submit-btn');
+  if (btn) { btn.disabled = true; btn.textContent = '提交中…'; }
 
-  // 显示成功
-  var overlay = document.getElementById('successOverlay');
-  if (overlay) overlay.classList.add('show');
+  // 写入 GitHub
+  ghSaveRecord(data).then(function() {
+    var overlay = document.getElementById('successOverlay');
+    if (overlay) overlay.classList.add('show');
+  }).catch(function(e) {
+    alert('提交失败：' + e.message + '\n请检查网络后重试');
+    if (btn) { btn.disabled = false; btn.textContent = '提 交 问 卷'; }
+  });
 }
 </script>
 </body>

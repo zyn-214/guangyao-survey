@@ -464,8 +464,9 @@ function cosClearRecords() {
       Prefix: cosPrefix,
       MaxKeys: 1000
     }, function(err, data) {
-      if (err) return reject(err);
+      if (err) { console.error('[COS] getBucket失败:', err); return reject(new Error('列出文件失败: ' + err.message)); }
       var contents = (data.Contents || []).filter(function(f) { return f.Key.endsWith('.json'); });
+      console.log('[COS] 找到 ' + contents.length + ' 个JSON文件待删除');
       if (!contents.length) return resolve();
       var objects = contents.map(function(f) { return { Key: f.Key }; });
       cosClient.deleteMultipleObject({
@@ -473,7 +474,8 @@ function cosClearRecords() {
         Region: cosRegion,
         Objects: objects
       }, function(err, result) {
-        if (err) return reject(err);
+        if (err) { console.error('[COS] deleteMultipleObject失败:', err); return reject(new Error('删除失败: ' + err.message)); }
+        console.log('[COS] 删除成功:', result);
         resolve(result);
       });
     });
@@ -566,9 +568,17 @@ function renderAdminList(records) {
   });
   document.getElementById('btnClear').addEventListener('click', function() {
     if (!confirm('确认清空所有云端数据？此操作不可恢复！')) return;
-    this.textContent = '删除中…';
-    this.disabled = true;
-    cosClearRecords().then(function() { location.reload(); });
+    var btn = this;
+    btn.textContent = '删除中…';
+    btn.disabled = true;
+    cosClearRecords().then(function() {
+      alert('数据已清空');
+      location.reload();
+    }).catch(function(err) {
+      alert('清空失败：' + (err.message || JSON.stringify(err)));
+      btn.textContent = '🗑 清空数据';
+      btn.disabled = false;
+    });
   });
 }
 

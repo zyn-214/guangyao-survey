@@ -380,13 +380,108 @@
 </div>
 
 <script>
-// ===== Option selection =====
-// 用 click 事件 + CSS touch-action 防滑动误触
-document.querySelectorAll('.option, .rating-option').forEach(function(opt) {
-  opt.addEventListener('click', function(e) {
-    handleSelect(this);
+var STORAGE_KEY = 'guangyao_ai_survey_2026';
+
+// ===== 管理后台模式 =====
+if (new URLSearchParams(location.search).get('mode') === 'admin') {
+  document.addEventListener('DOMContentLoaded', function() { showAdmin(); });
+} else {
+  document.addEventListener('DOMContentLoaded', function() { initSurvey(); });
+}
+
+function showAdmin() {
+  var records = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  document.body.innerHTML = '';
+  document.body.style.cssText = 'font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#F5F7FA;color:#2C3E50;margin:0;padding:0';
+
+  var html = '<div style="max-width:900px;margin:0 auto;padding:20px 16px 60px">' +
+    '<div style="background:linear-gradient(135deg,#1A3A6B,#2A5298);color:white;padding:22px 24px;border-radius:12px;margin-bottom:20px">' +
+    '<div style="font-size:11px;opacity:.75;margin-bottom:4px">管理后台</div>' +
+    '<div style="font-size:20px;font-weight:800">光耀集团AI赋能培训 · 调研数据</div>' +
+    '<div style="margin-top:10px;font-size:13px;opacity:.85">共收到 <strong>' + records.length + '</strong> 份问卷</div></div>';
+
+  if (records.length === 0) {
+    html += '<div style="text-align:center;padding:60px 20px;background:white;border-radius:12px;color:#6B7A9A">暂无数据</div>';
+  } else {
+    // 操作按钮
+    html += '<div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">' +
+      '<button onclick="exportCSV()" style="padding:10px 20px;background:#1A3A6B;color:white;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer">⬇ 导出 CSV</button>' +
+      '<button onclick="if(confirm(\'确认清空所有数据？此操作不可恢复！\')){localStorage.removeItem(\'' + STORAGE_KEY + '\');location.reload()}" style="padding:10px 20px;background:#F56C6C;color:white;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer">🗑 清空数据</button>' +
+      '<a href="?" style="padding:10px 20px;background:white;color:#1A3A6B;border:1.5px solid #1A3A6B;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none">← 返回问卷</a>' +
+      '</div>';
+
+    // 数据卡片
+    records.forEach(function(r, i) {
+      html += '<div style="background:white;border-radius:12px;padding:20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);border:1px solid rgba(0,0,0,.05)">' +
+        '<div style="font-size:13px;font-weight:700;color:#1A3A6B;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #E4E7ED">' +
+        '# ' + (i+1) + ' &nbsp;·&nbsp; ' + (r.name||'匿名') + ' &nbsp;·&nbsp; <span style="font-weight:400;color:#6B7A9A">' + (r.company||'') + ' ' + (r.department||'') + '</span>' +
+        '<span style="float:right;font-size:11px;color:#999;font-weight:400">' + (r._time ? new Date(r._time).toLocaleString('zh-CN') : '') + '</span></div>';
+
+      var fields = [
+        ['B1 使用频率', r.frequency],
+        ['B2 常用工具', r.tools],
+        ['B3 使用场景', r.scenes],
+        ['B4 了解程度', r.aiLevel ? r.aiLevel + ' 分' : ''],
+        ['C1 希望提升', r.needs],
+        ['C2 培训形式', r.format],
+        ['C3 培训时间', r.time],
+        ['D1 顾虑', r.concerns],
+        ['E1 携带设备', r.device],
+        ['E2 已装AI应用', r.mobileApps],
+        ['F1 态度', r.attitude],
+        ['F2 工作场景', r.scenario],
+        ['F3 自由建议', r.feedback],
+      ];
+      fields.forEach(function(f) {
+        if (!f[1]) return;
+        var val = Array.isArray(f[1]) ? f[1].join('、') : f[1];
+        html += '<div style="display:flex;gap:8px;margin-bottom:6px;font-size:13px;line-height:1.5">' +
+          '<span style="color:#6B7A9A;white-space:nowrap;min-width:90px">' + f[0] + '</span>' +
+          '<span>' + val + '</span></div>';
+      });
+      html += '</div>';
+    });
+  }
+  html += '</div>';
+  document.body.innerHTML = html;
+
+  // 挂载导出函数
+  window.exportCSV = function() {
+    var records = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    if (!records.length) { alert('暂无数据'); return; }
+    var cols = ['提交时间','姓名','板块/子公司','业务部门','B1使用频率','B2常用工具','B3使用场景','B4了解程度','C1希望提升','C2培训形式','C3培训时间','D1顾虑','E1设备','E2已装应用','F1态度','F2工作场景','F3建议'];
+    var rows = records.map(function(r) {
+      return [
+        r._time ? new Date(r._time).toLocaleString('zh-CN') : '',
+        r.name||'', r.company||'', r.department||'',
+        r.frequency||'',
+        Array.isArray(r.tools) ? r.tools.join('|') : (r.tools||''),
+        Array.isArray(r.scenes) ? r.scenes.join('|') : (r.scenes||''),
+        r.aiLevel||'',
+        Array.isArray(r.needs) ? r.needs.join('|') : (r.needs||''),
+        r.format||'', r.time||'',
+        Array.isArray(r.concerns) ? r.concerns.join('|') : (r.concerns||''),
+        Array.isArray(r.device) ? r.device.join('|') : (r.device||''),
+        Array.isArray(r.mobileApps) ? r.mobileApps.join('|') : (r.mobileApps||''),
+        r.attitude||'', r.scenario||'', r.feedback||''
+      ].map(function(v){ return '"' + String(v).replace(/"/g,'""') + '"'; }).join(',');
+    });
+    var csv = '\uFEFF' + cols.map(function(c){return '"'+c+'"';}).join(',') + '\n' + rows.join('\n');
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
+    a.download = '光耀集团AI调研数据_' + new Date().toLocaleDateString('zh-CN').replace(/\//g,'-') + '.csv';
+    a.click();
+  };
+}
+
+// ===== 问卷模式 =====
+function initSurvey() {
+  // 选项交互
+  document.querySelectorAll('.option, .rating-option').forEach(function(opt) {
+    opt.addEventListener('click', function() { handleSelect(this); });
   });
-});
+  updateProgress();
+}
 
 function handleSelect(el) {
   var parent = el.closest('.options') || el.closest('.rating-options');
@@ -415,6 +510,81 @@ function handleSelect(el) {
     if (input) input.checked = true;
   }
   updateProgress();
+}
+
+// ===== 进度条 =====
+function updateProgress() {
+  var required = document.querySelectorAll('[data-required="true"]');
+  var total = required.length;
+  var filled = 0;
+  required.forEach(function(f) {
+    if (f.classList.contains('options') || f.classList.contains('rating-options')) {
+      if (f.querySelector('input:checked')) filled++;
+    } else if (f.tagName === 'TEXTAREA' || f.tagName === 'INPUT') {
+      if (f.value.trim()) filled++;
+    }
+  });
+  var pct = total ? Math.round(filled / total * 100) : 0;
+  var bar = document.getElementById('progressBar');
+  var txt = document.getElementById('progressText');
+  var pctEl = document.getElementById('progressPct');
+  if (bar) bar.style.width = pct + '%';
+  if (txt) txt.textContent = '已完成 ' + filled + ' / ' + total + ' 题';
+  if (pctEl) pctEl.textContent = pct + '%';
+}
+
+// ===== 提交 =====
+function handleSubmit() {
+  // 清除旧错误
+  document.querySelectorAll('.error').forEach(function(el) { el.classList.remove('error'); });
+
+  var firstError = null;
+  document.querySelectorAll('[data-required="true"]').forEach(function(field) {
+    if (field.classList.contains('options') || field.classList.contains('rating-options')) {
+      if (!field.querySelector('input:checked')) {
+        field.classList.add('error');
+        if (!firstError) firstError = field;
+      }
+    } else if (field.tagName === 'TEXTAREA' || field.tagName === 'INPUT') {
+      if (!field.value.trim()) {
+        field.classList.add('error');
+        if (!firstError) firstError = field;
+      }
+    }
+  });
+
+  if (firstError) {
+    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  // 收集数据
+  var data = { _time: Date.now() };
+  // 文本输入
+  document.querySelectorAll('input[type="text"], textarea').forEach(function(el) {
+    if (el.name) data[el.name] = el.value.trim();
+  });
+  // 单选
+  document.querySelectorAll('.options[data-type="radio"], .rating-options[data-type="rating"]').forEach(function(group) {
+    var checked = group.querySelector('input:checked');
+    if (checked && group.dataset.name) data[group.dataset.name] = checked.value;
+  });
+  // 多选
+  document.querySelectorAll('.options[data-type="checkbox"]').forEach(function(group) {
+    if (!group.dataset.name) return;
+    var vals = [];
+    group.querySelectorAll('input:checked').forEach(function(cb) { vals.push(cb.value); });
+    data[group.dataset.name] = vals;
+  });
+
+  // 存储
+  var records = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  records.push(data);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+
+  // 显示成功
+  var overlay = document.getElementById('successOverlay');
+  if (overlay) overlay.classList.add('show');
 }
 </script>
 </body>

@@ -415,15 +415,30 @@ function ghSaveRecord(data) {
 
 // 读取全部记录
 function ghLoadRecords() {
-  return ghFetch(GH_API + '/' + DATA_DIR).then(function(r) {
-    if (!r.ok) return [];
-    return r.json();
-  }).then(function(files) {
-    if (!Array.isArray(files)) return [];
-    return Promise.all(files.filter(function(f) { return f.name.endsWith('.json'); }).map(function(f) {
-      return fetch(f.download_url).then(function(r) { return r.json(); });
-    }));
+  var timeout = new Promise(function(_, reject) {
+    setTimeout(function() { reject(new Error('请求超时（15秒）')); }, 15000);
   });
+  var req = ghFetch(GH_API + '/' + DATA_DIR, { cache: 'no-cache' })
+    .then(function(r) {
+      if (!r.ok) {
+        if (r.status === 404) return [];
+        throw new Error('HTTP ' + r.status);
+      }
+      return r.json();
+    }).then(function(files) {
+      if (!Array.isArray(files)) return [];
+      var jsonFiles = files.filter(function(f) { return f.name.endsWith('.json'); });
+      if (!jsonFiles.length) return [];
+      return Promise.all(jsonFiles.map(function(f) {
+        return ghFetch(f.download_url, { cache: 'no-cache' }).then(function(r) {
+          if (!r.ok) return null;
+          return r.json().catch(function() { return null; });
+        });
+      })).then(function(results) {
+        return results.filter(Boolean);
+      });
+    });
+  return Promise.race([req, timeout]);
 }
 
 // 清空全部数据
@@ -461,13 +476,19 @@ function showAdmin() {
     '<div id="adminBody"></div></div>';
   document.body.innerHTML = html;
 
+  document.getElementById('adminCount').textContent = '正在连接云端…';
   ghLoadRecords().then(function(records) {
     records.sort(function(a,b) { return (b._time||0) - (a._time||0); });
     document.getElementById('adminCount').textContent = '共收到 ' + records.length + ' 份问卷（云端存储）';
     renderAdminList(records);
   }).catch(function(e) {
-    document.getElementById('adminCount').textContent = '加载失败：' + e.message;
-    document.getElementById('adminBody').innerHTML = '<div style="text-align:center;padding:40px;color:#F56C6C">请检查网络连接后刷新重试</div>';
+    document.getElementById('adminCount').textContent = '加载失败';
+    document.getElementById('adminBody').innerHTML =
+      '<div style="text-align:center;padding:40px;background:white;border-radius:12px">' +
+      '<div style="color:#F56C6C;font-size:16px;font-weight:700;margin-bottom:12px">连接失败：' + e.message + '</div>' +
+      '<div style="color:#999;font-size:13px;margin-bottom:16px">可能原因：网络不通 / GitHub API 限流 / Token 失效</div>' +
+      '<button onclick="location.reload()" style="padding:10px 24px;background:#1A3A6B;color:white;border:none;border-radius:8px;font-size:14px;cursor:pointer">重新加载</button>' +
+      '</div>';
   });
 }
 
